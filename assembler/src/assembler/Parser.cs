@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace assembler;
 
@@ -18,6 +19,7 @@ public class Parser
   private int _labelLineNumber;
 
   private SymbolTable _symbolTable = new();
+  private readonly Code codes = new();
 
   public Parser(StreamReader streamReader)
   {
@@ -32,8 +34,10 @@ public class Parser
   public string Parse()
   {
     var result = new StringBuilder();
+    // first pass
     ParseLabels();
-    // result = SecondPass();
+    // second pass
+    result.Append(ConvertToBinary());
 
 
     return result.ToString();
@@ -44,6 +48,7 @@ public class Parser
   /// </summary>
   public void ParseLabels()
   {
+    int lineNumber = 0;
     var line = string.Empty;
     while ((line = _streamReader.ReadLine()) != null)
     {
@@ -68,12 +73,12 @@ public class Parser
           continue;
         }
 
-        _symbolTable.Add(label, _labelLineNumber.ToString());
+        _symbolTable.Add(label, lineNumber.ToString());
         // we don't increment the counter when dealing with a label
         continue;
       }
 
-      _labelLineNumber++;
+      lineNumber++;
     }
 
     // reset the pointer to the beginning of the file to prepare it for the second pass.
@@ -88,15 +93,84 @@ public class Parser
   {
     var result = new StringBuilder();
 
+    // number of the currently processed line.
+    int lineNumber = 0;
 
+    string? line;
+    while ((line = _streamReader.ReadLine()) != null)
+    {
+      if (IsComment(line))
+        continue;
 
+      line = NormalizeString(line);
+
+      if (string.IsNullOrEmpty(line))
+        continue;
+
+      if (line.StartsWith('(') && line.EndsWith(')'))
+        continue;
+
+      if (line.StartsWith('@'))
+      {
+        // remove the @ symbol from the instruction
+        result.AppendLine(GetAInstruction(line[1..], lineNumber));
+      }
+      else
+      {
+        result.AppendLine(GetCInstruction(line));
+      }
+
+      lineNumber++;
+    }
+
+    // remove the last \n
+    result.Length--;
     return result.ToString();
+  }
+
+  public string GetAInstruction(string instruction, int lineNumber)
+  {
+    bool isNumber = int.TryParse(instruction, out int value);
+    if (isNumber)
+    {
+      return codes.GetAInstruction(instruction);
+    }
+    // first time we encounter the instruction
+    if (!_symbolTable.Contains(instruction))
+    {
+      _symbolTable.Add(instruction, lineNumber.ToString());
+    }
+
+    return codes.GetAInstruction(_symbolTable.GetAddress(instruction));
+  }
+
+  public string GetCInstruction(string instruction)
+  {
+    Regex rgx = new(@"^([AMD]+=)?([01ADM!\-+&|]+)(;([J][A-Z]+))?$");
+
+    var match = rgx.Match(instruction);
+
+    if (!match.Success)
+    {
+      return string.Empty;
+    }
+
+    string dest = match.Groups[1].Success ? match.Groups[1].Value : "null";
+    string comp = match.Groups[2].Value;
+    string jump = match.Groups[4].Success ? match.Groups[4].Value : "null";
+
+    // remove the = in D= or A= or M=
+    if (dest != "null")
+    {
+      dest = dest[..^1];
+    }
+
+    return codes.GetCInstruction(dest, comp, jump);
   }
   public bool IsComment(string line)
   {
     return line.StartsWith('/');
   }
-
   public bool IsLabel(string line)
   {
     return line.StartsWith('(') && line.EndsWith(')');

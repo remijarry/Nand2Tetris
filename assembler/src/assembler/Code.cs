@@ -1,7 +1,18 @@
+using System.Text;
+
 namespace assembler;
 
 public class Code
 {
+  private const int BINARY_INSTRUCTION_LENGTH = 16;
+  private const string A_INSTRUCTION_PREFIX = "0";
+  private const int A_INSTRUCTION_LENGTH = 1;
+  private const int C_INSTRUCTION_LENGTH = 3;
+  private const string C_INSTRUCTION_PREFIX = "111";
+  private const string NO_DESTINATION = "null";
+  private const string COMP_MNEMONIC_WHEN_M = "1";
+  private const string COMP_MNEMONIC_WHEN_A = "0";
+
   /// <summary>
   /// Used with C instructions. Stores the Comp mapping (bits 12 to 6)
   /// </summary>
@@ -71,6 +82,53 @@ public class Code
     {"JMP","111"},
   };
 
+  /// <summary>
+  /// Given a 16 bits instruction,
+  /// A instructions start with 0.
+  /// The following 2 zeroes are not used as instructions but appended to the returned string.
+  /// </summary>
+  /// <returns></returns>
+  public string GetAInstruction(string instruction)
+  {
+    var binaryRepresentation = DecimalStringToBinaryString(instruction);
+    var padLeft = BINARY_INSTRUCTION_LENGTH - A_INSTRUCTION_LENGTH;
+    return $"{A_INSTRUCTION_PREFIX}{binaryRepresentation.PadLeft(padLeft, '0')}";
+  }
 
+  /// <summary>
+  /// dest=comp;jmp
+  /// Given a 16 bits instruction,
+  /// C instructions start with 1.
+  /// The following 2 zeroes are not used as instructions but appended to the returned string.
+  /// </summary>
+  /// <returns></returns>
+  public string GetCInstruction(string dest, string comp, string jump)
+  {
+    var compMnemonic = comp.Contains('M') ? COMP_MNEMONIC_WHEN_M : COMP_MNEMONIC_WHEN_A;
 
+    _cTable.TryGetValue(comp, out string? c);
+    _dTable.TryGetValue(dest, out string? d);
+    _jTable.TryGetValue(jump, out string? j);
+
+    return $"{C_INSTRUCTION_PREFIX}{compMnemonic}{c}{d}{j}";
+  }
+  private string DecimalStringToBinaryString(string number)
+  {
+    int n = int.Parse(number);
+    if (n == 0)
+    {
+      return "0";
+    }
+
+    var result = new StringBuilder();
+
+    while (n > 0)
+    {
+      int remainder = n % 2;
+      result.Insert(0, remainder);
+      n /= 2;
+    }
+
+    return result.ToString();
+  }
 }

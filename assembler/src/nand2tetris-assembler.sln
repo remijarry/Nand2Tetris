@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembler", "assembler\assembler.csproj", "{C6B283DD-557A-4E44-955A-16050906B0B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembler.tests", "assembler.tests\assembler.tests.csproj", "{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C6B283DD-557A-4E44-955A-16050906B0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6B283DD-557A-4E44-955A-16050906B0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6B283DD-557A-4E44-955A-16050906B0B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
