@@ -12,11 +12,9 @@ public class Parser
   private readonly StreamReader _streamReader;
 
   /// <summary>
-  /// Track the line number of the currently processed line.
-  /// When a (LABEL) is encountered, lineNumber is not incremented.
-  /// When a //comment is encountered, lineNumber is not incremented.
+  /// Pointer to the next available memory address for variables. We start at 16 onwards
   /// </summary>
-  private int _labelLineNumber;
+  private int _variableNumber = 16;
 
   private SymbolTable _symbolTable = new();
   private readonly Code codes = new();
@@ -93,9 +91,6 @@ public class Parser
   {
     var result = new StringBuilder();
 
-    // number of the currently processed line.
-    int lineNumber = 0;
-
     string? line;
     while ((line = _streamReader.ReadLine()) != null)
     {
@@ -113,14 +108,12 @@ public class Parser
       if (line.StartsWith('@'))
       {
         // remove the @ symbol from the instruction
-        result.AppendLine(GetAInstruction(line[1..], lineNumber));
+        result.AppendLine(GetAInstruction(line[1..]));
       }
       else
       {
         result.AppendLine(GetCInstruction(line));
       }
-
-      lineNumber++;
     }
 
     // remove the last \n
@@ -128,7 +121,7 @@ public class Parser
     return result.ToString();
   }
 
-  public string GetAInstruction(string instruction, int lineNumber)
+  public string GetAInstruction(string instruction)
   {
     bool isNumber = int.TryParse(instruction, out int value);
     if (isNumber)
@@ -138,7 +131,8 @@ public class Parser
     // first time we encounter the instruction
     if (!_symbolTable.Contains(instruction))
     {
-      _symbolTable.Add(instruction, lineNumber.ToString());
+      _symbolTable.Add(instruction, _variableNumber.ToString());
+      _variableNumber++;
     }
 
     return codes.GetAInstruction(_symbolTable.GetAddress(instruction));
