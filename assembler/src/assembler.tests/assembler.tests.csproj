@@ -23,5 +23,11 @@
   <ItemGroup>
     <ProjectReference Include="..\assembler\assembler.csproj" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <None Update="./files/input/*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <None Update="./files/expected/*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

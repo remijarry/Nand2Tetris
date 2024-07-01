@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembler", "assembler\assembler.csproj", "{C6B283DD-557A-4E44-955A-16050906B0B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembler", "assembler\assembler.csproj", "{F100E91F-4B30-44AC-AF30-68CB0600F4CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembler.tests", "assembler.tests\assembler.tests.csproj", "{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembler.tests", "assembler.tests\assembler.tests.csproj", "{D151F32D-7189-482E-9688-D340CADA44B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +24,13 @@ Global
 		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4324E1AD-E93D-4CA6-86F8-69377A8CD05D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F100E91F-4B30-44AC-AF30-68CB0600F4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F100E91F-4B30-44AC-AF30-68CB0600F4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F100E91F-4B30-44AC-AF30-68CB0600F4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F100E91F-4B30-44AC-AF30-68CB0600F4CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D151F32D-7189-482E-9688-D340CADA44B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D151F32D-7189-482E-9688-D340CADA44B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D151F32D-7189-482E-9688-D340CADA44B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D151F32D-7189-482E-9688-D340CADA44B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

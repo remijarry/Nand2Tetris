@@ -15,7 +15,6 @@ public class Parser
   /// Pointer to the next available memory address for variables. We start at 16 onwards
   /// </summary>
   private int _variableNumber = 16;
-
   private SymbolTable _symbolTable = new();
   private readonly Code codes = new();
 
@@ -36,8 +35,6 @@ public class Parser
     ParseLabels();
     // second pass
     result.Append(ConvertToBinary());
-
-
     return result.ToString();
   }
 
@@ -72,7 +69,7 @@ public class Parser
         }
 
         _symbolTable.Add(label, lineNumber.ToString());
-        // we don't increment the counter when dealing with a label
+        // we don't increment the counter when dealing with a labels
         continue;
       }
 

@@ -5,7 +5,7 @@ class Program
     static void Main(string[] args)
     {
         var directory = "programs";
-        var fileName = "Pong.asm";
+        var fileName = "Rect.asm";
 
         var filePath = Path.Combine(directory, fileName);
 

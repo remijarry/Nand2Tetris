@@ -1,15 +1,17 @@
 namespace assembler.tests;
 
-using assembler;
-
-public class ParseTests
+public class ParserTest
 {
     [Theory]
     [InlineData("Add.asm", "Add.asm")]
+    [InlineData("AddL.asm", "Add.asm")]
+    [InlineData("Max.asm", "Max.asm")]
     [InlineData("MaxL.asm", "Max.asm")]
+    [InlineData("Pong.asm", "Pong.asm")]
     [InlineData("PongL.asm", "Pong.asm")]
+    [InlineData("Rect.asm", "Rect.asm")]
     [InlineData("RectL.asm", "Rect.asm")]
-    public void ParseTest(string input, string expected)
+    public void Parse(string input, string expected)
     {
         var inputFileDirectory = "files/input";
         var inputPath = Path.Combine(inputFileDirectory, input);
