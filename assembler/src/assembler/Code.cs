@@ -1,17 +1,10 @@
-using System.Text;
-
 namespace assembler;
+
+using System.Text;
+using assembler.constants;
 
 public class Code
 {
-  private const int BINARY_INSTRUCTION_LENGTH = 16;
-  private const string A_INSTRUCTION_PREFIX = "0";
-  private const int A_INSTRUCTION_LENGTH = 1;
-  private const int C_INSTRUCTION_LENGTH = 3;
-  private const string C_INSTRUCTION_PREFIX = "111";
-  private const string NO_DESTINATION = "null";
-  private const string COMP_MNEMONIC_WHEN_M = "1";
-  private const string COMP_MNEMONIC_WHEN_A = "0";
 
   /// <summary>
   /// Used with C instructions. Stores the Comp mapping (bits 12 to 6)
@@ -91,9 +84,14 @@ public class Code
   /// <returns></returns>
   public string GetAInstruction(string instruction)
   {
+    if (string.IsNullOrEmpty(instruction))
+    {
+      throw new ArgumentException("Instruction is empty", nameof(instruction));
+    }
+
     var binaryRepresentation = DecimalStringToBinaryString(instruction);
-    var padLeft = BINARY_INSTRUCTION_LENGTH - A_INSTRUCTION_LENGTH;
-    return $"{A_INSTRUCTION_PREFIX}{binaryRepresentation.PadLeft(padLeft, '0')}";
+    var padLeft = Instructions.BINARY_INSTRUCTION_LENGTH - Instructions.A_INSTRUCTION_LENGTH;
+    return $"{Instructions.A_INSTRUCTION_PREFIX}{binaryRepresentation.PadLeft(padLeft, '0')}";
   }
 
   /// <summary>
@@ -105,13 +103,13 @@ public class Code
   /// <returns></returns>
   public string GetCInstruction(string dest, string comp, string jump)
   {
-    var compMnemonic = comp.Contains('M') ? COMP_MNEMONIC_WHEN_M : COMP_MNEMONIC_WHEN_A;
+    var compMnemonic = comp.Contains('M') ? Instructions.COMP_MNEMONIC_WHEN_M : Instructions.COMP_MNEMONIC_WHEN_A;
 
     _cTable.TryGetValue(comp, out string? c);
     _dTable.TryGetValue(dest, out string? d);
     _jTable.TryGetValue(jump, out string? j);
 
-    return $"{C_INSTRUCTION_PREFIX}{compMnemonic}{c}{d}{j}";
+    return $"{Instructions.C_INSTRUCTION_PREFIX}{compMnemonic}{c}{d}{j}";
   }
   private string DecimalStringToBinaryString(string number)
   {
