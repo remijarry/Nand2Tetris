@@ -1,10 +1,10 @@
 namespace VMTranslator.Enums
 {
-  public enum Command
+  public enum Action
   {
     #region segment commands
-    C_PUSH,
-    C_POP
+    push,
+    pop
     #endregion
   }
 }

@@ -11,7 +11,7 @@ namespace VMTranslator.Segments
     {
       pointers = new Dictionary<VirtualSegment, int>
       {
-        {VirtualSegment.Constant, 256},
+        {VirtualSegment.CONSTANT, 256},
         // {"SP", 256},
         // {"LCL", 0},
         // {"ARG", 0},

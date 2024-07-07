@@ -2,7 +2,8 @@
 using System;
 using System.Text;
 using VMTranslator.Commands;
-using VMTranslator.Enums;
+using VMTranslator.Segments;
+using Action = VMTranslator.Enums.Action;
 
 namespace VMTranslator
 {
@@ -10,33 +11,83 @@ namespace VMTranslator
   {
     private readonly string _fileName;
     private StringBuilder sb = new();
-    private ICommand _pushCommand;
+    private SegmentManager _segmentManager;
+
 
     public CodeWriter(string fileName)
     {
       _fileName = fileName;
-      _pushCommand = new PushCommand();
+      _segmentManager = new SegmentManager();
+
     }
 
-    public string WritePushPop(Command command, VirtualSegment segment, int index)
+    public string WriteCommand(ICommand command)
     {
-      if (index < 0)
-      {
-        throw new ArgumentOutOfRangeException(nameof(index));
-      }
-
-
       switch (command)
       {
-        case Command.C_POP:
-          return string.Empty;
-        case Command.C_PUSH:
-          _pushCommand.Segment = segment;
-          _pushCommand.Index = index;
-          return _pushCommand.Execute();
+        case MemoryAccessCommand memoryCommand:
+          return WritePushPop(memoryCommand);
+        case ArithmeticCommand arithmeticCommand:
+          return WriteArithmetic(arithmeticCommand);
         default:
-          throw new Exception("No valid command provided");
+          throw new NotSupportedException();
       }
+    }
+
+    private string WritePushPop(MemoryAccessCommand command)
+    {
+      if (command.Action == Action.push)
+      {
+        return WritePushCommand(command);
+      }
+      else if (command.Action == Action.pop)
+      {
+        return WritePopCommand(command);
+      }
+      else
+      {
+        throw new NotSupportedException();
+      }
+    }
+
+    public string WritePushCommand(MemoryAccessCommand command)
+    {
+      StringBuilder sb = new();
+      sb.AppendLine($"// {command.Action} {command.Segment} {command.Index}");
+
+      sb.AppendLine($"@{command.Index}");
+      sb.AppendLine("D=A");
+
+      #region use the stack pointer to select ram address (RAM[RAM[0]])
+      sb.AppendLine($"@{_segmentManager.GetStackPointerBaseAddress}");
+      sb.AppendLine("A=M");
+      #endregion
+
+      // set memory address to index
+      sb.AppendLine("M=D");
+      // increment stack pointer
+      sb.AppendLine("@0");
+      sb.AppendLine("M=M+1");
+
+      _segmentManager.IncrementPointer(command.Segment);
+
+      return sb.ToString();
+    }
+
+    public string WritePopCommand(MemoryAccessCommand command)
+    {
+      StringBuilder sb = new();
+
+
+      // decrement stack pointer
+      sb.AppendLine("@0");
+      sb.AppendLine("M=M+1");
+      return sb.ToString();
+    }
+
+    private string WriteArithmetic(ArithmeticCommand command)
+    {
+      throw new NotImplementedException();
     }
 
     public void SetFileName(string fileName)

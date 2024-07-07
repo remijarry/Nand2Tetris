@@ -2,9 +2,9 @@ namespace VMTranslator.Enums
 {
   public enum VirtualSegment
   {
-    Constant, // uses stack pointer
-    Local,
-    This,
-    That
+    CONSTANT, // uses stack pointer
+    LOCAL,
+    THIS,
+    THAT
   }
 }
