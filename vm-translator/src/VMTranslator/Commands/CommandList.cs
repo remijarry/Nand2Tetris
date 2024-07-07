@@ -15,5 +15,10 @@ namespace VMTranslator.Commands
     {
       _commands.Add(command);
     }
+
+    public List<ICommand> GetCommands()
+    {
+      return _commands;
+    }
   }
 }

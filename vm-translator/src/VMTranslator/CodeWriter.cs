@@ -50,29 +50,58 @@ namespace VMTranslator
       }
     }
 
+    /// <summary>
+    /// ex: push constant 2
+    /// @2
+    ///D=A
+    ///@0
+    ///A=M
+    ///M=D
+    ///@0
+    ///M=M+1
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
     public string WritePushCommand(MemoryAccessCommand command)
     {
       StringBuilder sb = new();
       sb.AppendLine($"// {command.Action} {command.Segment} {command.Index}");
-
-      sb.AppendLine($"@{command.Index}");
-      sb.AppendLine("D=A");
-
-      #region use the stack pointer to select ram address (RAM[RAM[0]])
-      sb.AppendLine($"@{_segmentManager.GetStackPointerBaseAddress}");
-      sb.AppendLine("A=M");
-      #endregion
-
-      // set memory address to index
-      sb.AppendLine("M=D");
-      // increment stack pointer
-      sb.AppendLine("@0");
-      sb.AppendLine("M=M+1");
-
+      sb.AppendLine(SetDRegisterToIndex(command.Index));
+      sb.AppendLine(SelectStackPointerMemoryValue());
+      sb.AppendLine(SetMemoryValueFrom("D"));
+      sb.AppendLine(IncrementMemoryStackPointer());
       _segmentManager.IncrementPointer(command.Segment);
 
       return sb.ToString();
     }
+
+    #region assembly code translation methods
+
+    private string SetDRegisterToIndex(int index)
+    {
+      return $"@{index}{Environment.NewLine}D=A";
+    }
+
+    /// <summary>
+    /// Use the stack pointer to select ram address (RAM[RAM[0]])
+    /// </summary>
+    /// <returns></returns>
+    private string SelectStackPointerMemoryValue()
+    {
+      return $"@{_segmentManager.GetStackPointerBaseAddress}{Environment.NewLine}A=M";
+    }
+
+    private string SetMemoryValueFrom(string register)
+    {
+      return $"M={register}";
+    }
+
+    private string IncrementMemoryStackPointer()
+    {
+      return $"M=D{Environment.NewLine}@0{Environment.NewLine}M=M+1";
+    }
+
+    #endregion
 
     public string WritePopCommand(MemoryAccessCommand command)
     {

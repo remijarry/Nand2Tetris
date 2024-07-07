@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using VMTranslator.Segments;
 
 namespace VMTranslator
@@ -31,6 +32,11 @@ namespace VMTranslator
                     var commands = parser.Parse();
 
                     var codeWriter = new CodeWriter(fileName);
+                    var sb = new StringBuilder();
+                    foreach (var cmd in commands.GetCommands())
+                    {
+                        sb.AppendLine(codeWriter.WriteCommand(cmd));
+                    }
                 }
             }
             catch (IOException e)
