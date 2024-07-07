@@ -1,4 +1,5 @@
 ﻿using System;
+using VMTranslator.Segments;
 
 namespace VMTranslator
 {
@@ -6,7 +7,15 @@ namespace VMTranslator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            // stage I: Stack arithmetic commands + push constant x.
+            // stage II: Memory Access commands.
+
+            // dotnet VMTranslator MyProg.vm
+
+            Console.WriteLine("Hello, World!");
+
+            SegmentManager segmentManager = new SegmentManager();
+
         }
     }
 }
