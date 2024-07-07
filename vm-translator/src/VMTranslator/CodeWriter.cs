@@ -65,13 +65,67 @@ namespace VMTranslator
     public string WritePushCommand(MemoryAccessCommand command)
     {
       StringBuilder sb = new();
-      sb.AppendLine($"// {command.Action} {command.Segment} {command.Index}");
+      sb.AppendLine($"// {command.Action} {command.Segment} {command.Index}".ToLower());
       sb.AppendLine(SetDRegisterToIndex(command.Index));
       sb.AppendLine(SelectStackPointerMemoryValue());
       sb.AppendLine(SetMemoryValueFrom("D"));
       sb.AppendLine(IncrementMemoryStackPointer());
       _segmentManager.IncrementPointer(command.Segment);
 
+      return sb.ToString();
+    }
+
+    public string WritePopCommand(MemoryAccessCommand command)
+    {
+      StringBuilder sb = new();
+
+
+      // decrement stack pointer
+      sb.AppendLine("@0");
+      sb.AppendLine("M=M+1");
+      return sb.ToString();
+    }
+
+    /// <summary>
+    /// Pops 2 values from the stack, performs the arithmetic operation and push the result back onto the stack.
+    /// if stack is [x, y] then we do x + y / x - y etc...
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    private string WriteArithmetic(ArithmeticCommand command)
+    {
+
+      var sb = new StringBuilder();
+      sb.AppendLine($"// {command.Type}");
+
+      // decrement stack pointer by 2 because x has to be the left operand.
+      sb.AppendLine(DecrementMemoryStackPointer());
+      sb.AppendLine(DecrementMemoryStackPointer());
+
+      sb.AppendLine(SelectStackPointerMemoryValue());
+      sb.AppendLine(SetDRegistertoRamValue());
+
+      sb.AppendLine(IncrementMemoryStackPointer());
+      sb.AppendLine(SelectStackPointerMemoryValue());
+
+      switch (command.Type)
+      {
+        case ArithmeticCommandType.add:
+          sb.AppendLine(AddDRegisterToRamValue());
+          sb.AppendLine(DecrementMemoryStackPointer());
+          break;
+        case ArithmeticCommandType.sub:
+          sb.AppendLine(SubDRegisterToRamValue());
+          sb.AppendLine(DecrementMemoryStackPointer());
+          break;
+
+      }
+
+      sb.AppendLine(SelectStackPointerMemoryValue());
+      sb.AppendLine(SetRamValueToDRegister());
+      sb.AppendLine(IncrementMemoryStackPointer());
+
+      _segmentManager.DecrementPointerBy(1);
       return sb.ToString();
     }
 
@@ -83,7 +137,39 @@ namespace VMTranslator
     }
 
     /// <summary>
-    /// Use the stack pointer to select ram address (RAM[RAM[0]])
+    /// D=D+M
+    /// </summary>
+    /// <returns></returns>
+    private string SetDRegistertoRamValue()
+    {
+      return "D=M";
+    }
+
+    private string AddDRegisterToRamValue()
+    {
+      return "D=D+M";
+    }
+
+    /// <summary>
+    /// D=D-M
+    /// </summary>
+    /// <returns></returns>
+    private string SubDRegisterToRamValue()
+    {
+      return "D=D-M";
+    }
+
+    /// <summary>
+    /// M=D
+    /// </summary>
+    /// <returns></returns>
+    private string SetRamValueToDRegister()
+    {
+      return "M=D";
+    }
+
+    /// <summary>
+    /// @0;A=M
     /// </summary>
     /// <returns></returns>
     private string SelectStackPointerMemoryValue()
@@ -98,26 +184,17 @@ namespace VMTranslator
 
     private string IncrementMemoryStackPointer()
     {
-      return $"M=D{Environment.NewLine}@0{Environment.NewLine}M=M+1";
+      return $"@0{Environment.NewLine}M=M+1";
+    }
+
+    private string DecrementMemoryStackPointer()
+    {
+      return $"@0{Environment.NewLine}M=M-1";
     }
 
     #endregion
 
-    public string WritePopCommand(MemoryAccessCommand command)
-    {
-      StringBuilder sb = new();
 
-
-      // decrement stack pointer
-      sb.AppendLine("@0");
-      sb.AppendLine("M=M+1");
-      return sb.ToString();
-    }
-
-    private string WriteArithmetic(ArithmeticCommand command)
-    {
-      throw new NotImplementedException();
-    }
 
     public void SetFileName(string fileName)
     {

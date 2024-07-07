@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "dotnet: build",
       "program": "${workspaceFolder}/src/VMTranslator/bin/Debug/net5.0/VMTranslator.dll",
-      "args": ["simple-push"],
+      "args": ["/home/tgrx/Documents/Dev/Nand2Tetris/vm-translator/src/VMTranslator.Tests/Files/Input/Constant/simple-push.vm"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "console": "internalConsole"

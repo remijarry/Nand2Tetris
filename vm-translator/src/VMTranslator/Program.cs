@@ -37,6 +37,7 @@ namespace VMTranslator
                     {
                         sb.AppendLine(codeWriter.WriteCommand(cmd));
                     }
+                    Console.WriteLine(sb.ToString());
                 }
             }
             catch (IOException e)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using VMTranslator.Enums;
 
@@ -11,6 +12,8 @@ namespace VMTranslator.Segments
     {
       pointers = new Dictionary<VirtualSegment, int>
       {
+        // constant is also used as SP
+        // todo: refactor, it can be confusing
         {VirtualSegment.CONSTANT, 256},
         // {"SP", 256},
         // {"LCL", 0},
@@ -32,6 +35,11 @@ namespace VMTranslator.Segments
       {
         // handle error
       }
+    }
+
+    public void DecrementPointerBy(int n)
+    {
+      pointers[VirtualSegment.CONSTANT] -= n;
     }
 
     public int GetStackPointerBaseAddress => 0;
