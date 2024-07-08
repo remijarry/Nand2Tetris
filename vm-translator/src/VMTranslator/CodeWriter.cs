@@ -4,7 +4,6 @@ using System.Text;
 using VMTranslator.Commands;
 using VMTranslator.Enums;
 using VMTranslator.Segments;
-using Action = VMTranslator.Enums.Action;
 
 namespace VMTranslator
 {
@@ -37,18 +36,9 @@ namespace VMTranslator
 
     private string WritePushPop(MemoryAccessCommand command)
     {
-      if (command.Action == Action.push)
-      {
-        return WritePushCommand(command);
-      }
-      else if (command.Action == Action.pop)
-      {
-        return WritePopCommand(command);
-      }
-      else
-      {
-        throw new NotSupportedException();
-      }
+      var code = command.GetAssemblyCode();
+      _segmentManager.IncrementPointer(command.Segment);
+      return code;
     }
 
     /// <summary>
@@ -66,11 +56,7 @@ namespace VMTranslator
     public string WritePushCommand(MemoryAccessCommand command)
     {
       StringBuilder sb = new();
-      sb.AppendLine($"// {command.Action} {command.Segment} {command.Index}".ToLower());
-      sb.AppendLine(CompCommands.SetDRegisterToIndex(command.Index));
-      sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
-      sb.AppendLine(CompCommands.SetMemoryValueFrom("D"));
-      sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
+
       _segmentManager.IncrementPointer(command.Segment);
 
       return sb.ToString();
@@ -98,7 +84,7 @@ namespace VMTranslator
 
       var sb = new StringBuilder();
       sb.Append(command.GetAssemblyCode());
-      switch(command.Name)
+      switch (command.Name)
       {
         // we only have one value left out of two.
         case CommandName.add:
