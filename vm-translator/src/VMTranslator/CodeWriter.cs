@@ -23,6 +23,7 @@ namespace VMTranslator
 
     public string WriteCommand(ICommand command)
     {
+      //todo: delete extra lines at the end of the file.
       switch (command)
       {
         case MemoryAccessCommand memoryCommand:

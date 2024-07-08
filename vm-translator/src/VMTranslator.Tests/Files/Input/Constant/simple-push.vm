@@ -1,7 +1,2 @@
 push constant 2
 push constant 3
-add
-push constant 4
-sub
-push constant 5
-neg

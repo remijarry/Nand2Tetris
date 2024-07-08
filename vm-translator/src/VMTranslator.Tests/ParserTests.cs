@@ -1,5 +1,3 @@
-using VMTranslator.Enums;
-
 namespace VMTranslator.Tests;
 
 public class ParserTests

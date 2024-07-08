@@ -23,6 +23,9 @@
   <ItemGroup>
     <None Update="./Files/Input/Constant/*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="./Files/Expected/Constant/*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\VMTranslator\VMTranslator.csproj" />
