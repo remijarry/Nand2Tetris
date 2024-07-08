@@ -96,36 +96,19 @@ namespace VMTranslator
     {
 
       var sb = new StringBuilder();
-      sb.AppendLine($"// {command.Type}");
-
-      // decrement stack pointer by 2 because x has to be the left operand.
-      sb.AppendLine(DecrementMemoryStackPointer());
-      sb.AppendLine(DecrementMemoryStackPointer());
-
-      sb.AppendLine(SelectStackPointerMemoryValue());
-      sb.AppendLine(SetDRegistertoRamValue());
-
-      sb.AppendLine(IncrementMemoryStackPointer());
-      sb.AppendLine(SelectStackPointerMemoryValue());
-
-      switch (command.Type)
+      sb.Append(command.GetAssemblyCode());
+      switch(command.Type)
       {
+        // we only have one value left out of two.
         case ArithmeticCommandType.add:
-          sb.AppendLine(AddDRegisterToRamValue());
-          sb.AppendLine(DecrementMemoryStackPointer());
-          break;
         case ArithmeticCommandType.sub:
-          sb.AppendLine(SubDRegisterToRamValue());
-          sb.AppendLine(DecrementMemoryStackPointer());
+          _segmentManager.DecrementPointerBy(1);
           break;
-
+        // y has been negated and put back on the stack. we don't touch the pointer.
+        case ArithmeticCommandType.neg:
+          break;
       }
 
-      sb.AppendLine(SelectStackPointerMemoryValue());
-      sb.AppendLine(SetRamValueToDRegister());
-      sb.AppendLine(IncrementMemoryStackPointer());
-
-      _segmentManager.DecrementPointerBy(1);
       return sb.ToString();
     }
 

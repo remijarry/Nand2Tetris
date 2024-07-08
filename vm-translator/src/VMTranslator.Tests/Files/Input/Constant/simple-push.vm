@@ -1,3 +1,7 @@
 push constant 2
 push constant 3
 add
+push constant 6
+neg
+push constant 9
+sub
