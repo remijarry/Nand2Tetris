@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using VMTranslator.Commands;
+using VMTranslator.Enums;
 
 namespace VMTranslator
 {
@@ -45,7 +46,7 @@ namespace VMTranslator
           list.AddCommand(command);
           continue;
         }
-        if (Enum.TryParse<ArithmeticCommandType>(line, out var arithmeticCommand))
+        if (Enum.TryParse<CommandName>(line, out var arithmeticCommand))
         {
           list.AddCommand(new ArithmeticCommand(arithmeticCommand));
         }

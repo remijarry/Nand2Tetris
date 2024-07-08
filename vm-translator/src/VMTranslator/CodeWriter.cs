@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using VMTranslator.Commands;
+using VMTranslator.Enums;
 using VMTranslator.Segments;
 using Action = VMTranslator.Enums.Action;
 
@@ -66,10 +67,10 @@ namespace VMTranslator
     {
       StringBuilder sb = new();
       sb.AppendLine($"// {command.Action} {command.Segment} {command.Index}".ToLower());
-      sb.AppendLine(SetDRegisterToIndex(command.Index));
-      sb.AppendLine(SelectStackPointerMemoryValue());
-      sb.AppendLine(SetMemoryValueFrom("D"));
-      sb.AppendLine(IncrementMemoryStackPointer());
+      sb.AppendLine(CompCommands.SetDRegisterToIndex(command.Index));
+      sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
+      sb.AppendLine(CompCommands.SetMemoryValueFrom("D"));
+      sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
       _segmentManager.IncrementPointer(command.Segment);
 
       return sb.ToString();
@@ -97,112 +98,23 @@ namespace VMTranslator
 
       var sb = new StringBuilder();
       sb.Append(command.GetAssemblyCode());
-      switch(command.Type)
+      switch(command.Name)
       {
         // we only have one value left out of two.
-        case ArithmeticCommandType.add:
-        case ArithmeticCommandType.sub:
+        case CommandName.add:
+        case CommandName.sub:
           _segmentManager.DecrementPointerBy(1);
           break;
         // y has been negated and put back on the stack. we don't touch the pointer.
-        case ArithmeticCommandType.neg:
+        case CommandName.neg:
           break;
       }
 
       return sb.ToString();
     }
-
-    #region assembly code translation methods
-
-    private string SetDRegisterToIndex(int index)
-    {
-      return $"@{index}{Environment.NewLine}D=A";
-    }
-
-    /// <summary>
-    /// D=D+M
-    /// </summary>
-    /// <returns></returns>
-    private string SetDRegistertoRamValue()
-    {
-      return "D=M";
-    }
-
-    private string AddDRegisterToRamValue()
-    {
-      return "D=D+M";
-    }
-
-    /// <summary>
-    /// D=D-M
-    /// </summary>
-    /// <returns></returns>
-    private string SubDRegisterToRamValue()
-    {
-      return "D=D-M";
-    }
-
-    /// <summary>
-    /// M=D
-    /// </summary>
-    /// <returns></returns>
-    private string SetRamValueToDRegister()
-    {
-      return "M=D";
-    }
-
-    /// <summary>
-    /// @0;A=M
-    /// </summary>
-    /// <returns></returns>
-    private string SelectStackPointerMemoryValue()
-    {
-      return $"@{_segmentManager.GetStackPointerBaseAddress}{Environment.NewLine}A=M";
-    }
-
-    private string SetMemoryValueFrom(string register)
-    {
-      return $"M={register}";
-    }
-
-    private string IncrementMemoryStackPointer()
-    {
-      return $"@0{Environment.NewLine}M=M+1";
-    }
-
-    private string DecrementMemoryStackPointer()
-    {
-      return $"@0{Environment.NewLine}M=M-1";
-    }
-
-    #endregion
-
-
-
     public void SetFileName(string fileName)
     {
       // todo
-    }
-
-    /// <summary>
-    /// RAM[SP++] = index
-    /// </summary>
-    /// <param name="index">The constant value to push</param>
-    private void WritePushConstant(int index)
-    {
-      sb.AppendLine($"// push constant {index}");
-      // @index
-      sb.AppendLine($"@{index}");
-      sb.AppendLine("D=A");
-      // @SP (base address is 0)
-      sb.AppendLine("@0");
-      sb.AppendLine("A=M");
-      sb.AppendLine("M=D");
-      sb.AppendLine("@0");
-      sb.AppendLine("M=M+1");
-
-      // incrementing the stack pointer by 1
-      // SP++;
     }
   }
 }
