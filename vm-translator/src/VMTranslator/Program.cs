@@ -35,7 +35,7 @@ namespace VMTranslator
                     var sb = new StringBuilder();
                     foreach (var cmd in commands.GetCommands())
                     {
-                        sb.AppendLine(codeWriter.WriteCommand(cmd));
+                        sb.Append(codeWriter.WriteCommand(cmd));
                     }
                     Console.WriteLine(sb.ToString());
                 }

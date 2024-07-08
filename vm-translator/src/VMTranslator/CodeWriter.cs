@@ -42,27 +42,6 @@ namespace VMTranslator
       return code;
     }
 
-    /// <summary>
-    /// ex: push constant 2
-    /// @2
-    ///D=A
-    ///@0
-    ///A=M
-    ///M=D
-    ///@0
-    ///M=M+1
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns>
-    public string WritePushCommand(MemoryAccessCommand command)
-    {
-      StringBuilder sb = new();
-
-      _segmentManager.IncrementPointer(command.Segment);
-
-      return sb.ToString();
-    }
-
     public string WritePopCommand(MemoryAccessCommand command)
     {
       StringBuilder sb = new();
