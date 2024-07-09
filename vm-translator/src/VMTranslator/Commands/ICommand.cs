@@ -4,9 +4,9 @@ namespace VMTranslator.Commands
 {
   public interface ICommand
   {
-    string CommandType { get; }
+    public string CommandType { get; }
 
-    CommandName Name { get; init; }
+    public CommandName CommandName { get; set; }
 
     public string GetAssemblyCode();
   }

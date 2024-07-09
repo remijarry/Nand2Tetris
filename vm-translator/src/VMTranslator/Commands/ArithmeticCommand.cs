@@ -7,27 +7,22 @@ namespace VMTranslator.Commands
   {
     public string CommandType => "arithmetic";
 
-    public CommandName Name { get; init; }
+    public CommandName CommandName { get; set; }
 
     public ArithmeticCommand(CommandName name)
     {
-      Name = name;
+      CommandName = name;
     }
 
     public string GetAssemblyCode()
     {
       var sb = new StringBuilder();
-      sb.AppendLine($"// {Name}");
-      switch (Name)
+      sb.AppendLine($"// {CommandName}");
+      switch (CommandName)
       {
         case CommandName.add:
           // align to x
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
-          sb.AppendLine(CompCommands.SetDRegistertoRamValue());
-          sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
+          sb.Append(CompCommands.SelectXAndYFromTheStack());
           sb.AppendLine(CompCommands.AddDRegisterToRamValue());
           sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
           sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
@@ -36,12 +31,7 @@ namespace VMTranslator.Commands
           return sb.ToString();
         case CommandName.sub:
           // align to x
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
-          sb.AppendLine(CompCommands.SetDRegistertoRamValue());
-          sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
+          sb.Append(CompCommands.SelectXAndYFromTheStack());
           sb.AppendLine(CompCommands.SubDRegisterToRamValue());
           sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
           sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());

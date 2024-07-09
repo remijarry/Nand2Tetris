@@ -1,9 +1,53 @@
 using System;
+using System.Text;
 
 namespace VMTranslator.Commands
 {
+  //todo: maybe split this into d instructions, j instructions etc.
   public class CompCommands
   {
+    #region J instructions
+    /// <summary>
+    /// 0;JMP
+    /// </summary>
+    /// <returns></returns>
+    public static string JumpUnconditional()
+    {
+      return "0;JMP";
+    }
+
+    /// <summary>
+    /// val;JEQ
+    /// </summary>
+    /// <param name="val"></param>
+    /// <returns></returns>
+    public static string JumpEqual(string val)
+    {
+      return $"{val};JEQ";
+    }
+    #endregion
+
+    /// <summary>
+    /// @LABEL
+    /// </summary>
+    /// <param name="label"></param>
+    /// <returns></returns>
+    public static string ReferenceLabel(string label)
+    {
+      return $"@{label.ToUpper()}";
+    }
+
+    /// <summary>
+    /// (LABEL)
+    /// </summary>
+    /// <param name="label"></param>
+    /// <returns></returns>
+    public static string CreateLabel(string label)
+    {
+      return $"({label.ToUpper()})";
+    }
+
+    #region D=
     /// <summary>
     /// @i;D=A
     /// </summary>
@@ -40,6 +84,35 @@ namespace VMTranslator.Commands
     {
       return "D=D-M";
     }
+
+    /// <summary>
+    /// D=-D
+    /// </summary>
+    /// <returns></returns>
+    public static string NegateDRegisterValue()
+    {
+      return "D=-D";
+    }
+
+    /// <summary>
+    /// D=D-1
+    /// </summary>
+    /// <returns></returns>
+    public static string SubOneToD()
+    {
+      return "D=D-1";
+    }
+
+    /// <summary>
+    /// D=0
+    /// </summary>
+    /// <returns></returns>
+    public static string SetDToZero()
+    {
+      return "D=0";
+    }
+
+    #endregion
 
     /// <summary>
     /// M=D
@@ -87,13 +160,16 @@ namespace VMTranslator.Commands
       return $"@0{Environment.NewLine}M=M-1";
     }
 
-    /// <summary>
-    /// D=-D
-    /// </summary>
-    /// <returns></returns>
-    public static string NegateDRegisterValue()
+    public static string SelectXAndYFromTheStack()
     {
-      return "D=-D";
+      var sb = new StringBuilder();
+      sb.AppendLine(DecrementMemoryStackPointer());
+      sb.AppendLine(DecrementMemoryStackPointer());
+      sb.AppendLine(SelectStackPointerMemoryValue());
+      sb.AppendLine(SetDRegistertoRamValue());
+      sb.AppendLine(IncrementMemoryStackPointer());
+      sb.AppendLine(SelectStackPointerMemoryValue());
+      return sb.ToString();
     }
   }
 }

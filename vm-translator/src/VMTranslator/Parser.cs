@@ -42,13 +42,20 @@ namespace VMTranslator
           var segment = tokens[1];
           var index = tokens[2];
 
-          var command = new MemoryAccessCommand(action, segment, index);
-          list.AddCommand(command);
+          var memoryCommand = new MemoryAccessCommand(action, segment, index);
+          list.AddCommand(memoryCommand);
           continue;
         }
-        if (Enum.TryParse<CommandName>(line, out var arithmeticCommand))
+        if (Enum.TryParse<CommandName>(line, out var command))
         {
-          list.AddCommand(new ArithmeticCommand(arithmeticCommand));
+          if (command == CommandName.add || command == CommandName.sub || command == CommandName.neg)
+          {
+            list.AddCommand(new ArithmeticCommand(command));
+          }
+          else
+          {
+            list.AddCommand(new LogicalCommand(command));
+          }
         }
 
       }

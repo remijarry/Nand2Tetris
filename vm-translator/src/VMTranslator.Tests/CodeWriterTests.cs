@@ -64,8 +64,31 @@ public class CodeWriterTests
     var expected = File.ReadAllText(expectedPath);
 
     Assert.Equal(expected, sb.ToString());
+  }
 
-    //todo check code segment pointer
+  [Theory]
+  [InlineData("simple-push-and-eq.vm", "simple-push-and-eq.asm")]
+  public void PushTwoConstantsAndDoLogicalOperationOnthem(string inputFile, string expectedFile)
+  {
+    var inputPath = Path.Combine(_inputFileDirectory, inputFile);
+
+    using FileStream fs = new(inputPath, FileMode.Open, FileAccess.Read);
+    using StreamReader sr = new(fs);
+
+    var parser = new Parser(sr);
+    var commands = parser.Parse();
+
+    var codeWriter = new CodeWriter("test");
+    var sb = new StringBuilder();
+    foreach (var cmd in commands.GetCommands())
+    {
+      sb.AppendLine(codeWriter.WriteCommand(cmd));
+    }
+
+    var expectedPath = Path.Combine(_expectedFileDirectory, expectedFile);
+    var expected = File.ReadAllText(expectedPath);
+
+    Assert.Equal(expected, sb.ToString());
   }
 
 }
