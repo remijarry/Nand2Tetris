@@ -68,6 +68,11 @@ public class CodeWriterTests
 
   [Theory]
   [InlineData("simple-push-and-eq.vm", "simple-push-and-eq.asm")]
+  [InlineData("simple-push-and-gt.vm", "simple-push-and-gt.asm")]
+  [InlineData("simple-push-and-lt.vm", "simple-push-and-lt.asm")]
+  [InlineData("simple-push-and-or.vm", "simple-push-and-or.asm")]
+  [InlineData("simple-push-and-and.vm", "simple-push-and-and.asm")]
+  [InlineData("simple-push-and-not.vm", "simple-push-and-not.asm")]
   public void PushTwoConstantsAndDoLogicalOperationOnthem(string inputFile, string expectedFile)
   {
     var inputPath = Path.Combine(_inputFileDirectory, inputFile);

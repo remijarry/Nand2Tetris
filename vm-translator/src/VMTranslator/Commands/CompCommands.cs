@@ -25,6 +25,26 @@ namespace VMTranslator.Commands
     {
       return $"{val};JEQ";
     }
+
+    /// <summary>
+    /// val;JGT
+    /// </summary>
+    /// <param name="val"></param>
+    /// <returns></returns>
+    public static string JumpGreaterThan(string val)
+    {
+      return $"{val};JGT";
+    }
+
+    /// <summary>
+    /// val;JLT
+    /// </summary>
+    /// <param name="val"></param>
+    /// <returns></returns>
+    public static string JumpLessThan(string val)
+    {
+      return $"{val};JLT";
+    }
     #endregion
 
     /// <summary>
@@ -104,6 +124,15 @@ namespace VMTranslator.Commands
     }
 
     /// <summary>
+    /// D=D+1
+    /// </summary>
+    /// <returns></returns>
+    public static string AddOneToD()
+    {
+      return "D=D+1";
+    }
+
+    /// <summary>
     /// D=0
     /// </summary>
     /// <returns></returns>
@@ -112,7 +141,48 @@ namespace VMTranslator.Commands
       return "D=0";
     }
 
+    /// <summary>
+    /// D=-1
+    /// </summary>
+    /// <returns></returns>
+    public static string SetDToMinusOne()
+    {
+      return "D=-1";
+    }
     #endregion
+
+    /// <summary>
+    /// dest=a|b
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    public static string Or(string dest, string a, string b)
+    {
+      return $"{dest}={a}|{b}";
+    }
+
+    /// <summary>
+    /// dest=a&b
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
+    public static string And(string dest, string a, string b)
+    {
+      return $"{dest}={a}&{b}";
+    }
+
+    /// <summary>
+    /// dest=!a
+    /// </summary>
+    /// <param name="dest"></param>
+    /// <param name="a"></param>
+    /// <returns></returns>
+    public static string Not(string dest, string a)
+    {
+      return $"{dest}=!{a}";
+    }
 
     /// <summary>
     /// M=D
