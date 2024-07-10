@@ -4,6 +4,7 @@ namespace VMTranslator.Enums
   {
     CONSTANT, // uses stack pointer
     LOCAL,
+    ARG,
     THIS,
     THAT
   }

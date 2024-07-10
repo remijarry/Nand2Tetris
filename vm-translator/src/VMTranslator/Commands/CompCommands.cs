@@ -199,7 +199,7 @@ namespace VMTranslator.Commands
     /// <returns></returns>
     public static string SelectStackPointerMemoryValue()
     {
-      return $"@0{Environment.NewLine}A=M";
+      return $"@{BaseAddress.SP}{Environment.NewLine}A=M";
     }
 
     /// <summary>
@@ -218,7 +218,7 @@ namespace VMTranslator.Commands
     /// <returns></returns>
     public static string IncrementMemoryStackPointer()
     {
-      return $"@0{Environment.NewLine}M=M+1";
+      return $"@{BaseAddress.SP}{Environment.NewLine}M=M+1";
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ namespace VMTranslator.Commands
     /// <returns></returns>
     public static string DecrementMemoryStackPointer()
     {
-      return $"@0{Environment.NewLine}M=M-1";
+      return $"@{BaseAddress.SP}{Environment.NewLine}M=M-1";
     }
 
     public static string SelectXAndYFromTheStack()

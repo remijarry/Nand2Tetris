@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using VMTranslator.Segments;
 
 namespace VMTranslator
 {
@@ -9,14 +8,15 @@ namespace VMTranslator
     {
         static void Main(string[] args)
         {
-            // stage I: Stack arithmetic commands + push constant x.
-            // stage II: Memory Access commands.
-
+            // You have already handled the constant segment.
+            // 1. Next, handle the segments local, argument, this, and that.
+            // 2. Next, handle the pointer and temp segments, in particular allowing modiﬁca-
+            // tion of the bases of the this and that segments.
+            // 3. Finally, handle the static segment.
             // dotnet VMTranslator MyProg.vm
 
             Console.WriteLine("Hello, World!");
 
-            SegmentManager segmentManager = new SegmentManager();
             if (string.IsNullOrWhiteSpace(args[0]))
             {
                 Console.WriteLine("Usage: dotnet VMTranslator <filename>");

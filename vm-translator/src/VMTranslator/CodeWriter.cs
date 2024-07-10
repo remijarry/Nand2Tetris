@@ -1,9 +1,5 @@
-
-using System;
 using System.Text;
 using VMTranslator.Commands;
-using VMTranslator.Enums;
-using VMTranslator.Segments;
 
 namespace VMTranslator
 {
@@ -11,14 +7,11 @@ namespace VMTranslator
   {
     private readonly string _fileName;
     private StringBuilder sb = new();
-    private SegmentManager _segmentManager;
 
 
     public CodeWriter(string fileName)
     {
       _fileName = fileName;
-      _segmentManager = new SegmentManager();
-
     }
 
     public string WriteCommand(ICommand command)
@@ -29,8 +22,6 @@ namespace VMTranslator
     public string WritePopCommand(MemoryAccessCommand command)
     {
       StringBuilder sb = new();
-
-
       // decrement stack pointer
       sb.AppendLine("@0");
       sb.AppendLine("M=M+1");
