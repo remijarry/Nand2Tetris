@@ -6,7 +6,6 @@ A=M
 M=D
 @0
 M=M+1
-
 // push constant 3
 @3
 D=A
@@ -15,7 +14,6 @@ A=M
 M=D
 @0
 M=M+1
-
 // sub
 @0
 M=M-1
@@ -36,4 +34,3 @@ A=M
 M=D
 @0
 M=M+1
-

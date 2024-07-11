@@ -104,6 +104,15 @@ namespace VMTranslator.Commands
     }
 
     /// <summary>
+    /// D=D+A
+    /// </summary>
+    /// <returns></returns>
+    public static string AddDRegisterToARegister()
+    {
+      return "D=D+A";
+    }
+
+    /// <summary>
     /// D=D-M
     /// </summary>
     /// <returns></returns>

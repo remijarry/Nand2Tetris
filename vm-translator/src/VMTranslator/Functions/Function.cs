@@ -14,6 +14,7 @@ namespace VMTranslator.Functions
     private const string LT_FUNCTION = "(LT)";
     private const string OR_FUNCTION = "(OR)";
     private const string AND_FUNCTION = "(AND)";
+    private const string ADD_FUNCTION = "(ADD)";
     private const string NOT_FUNCTION = "(NOT)";
     private const string TRUE_LABEL = "TRUE";
     private const string FALSE_LABEL = "FALSE";
@@ -82,7 +83,8 @@ namespace VMTranslator.Functions
           sb.AppendLine(AsmCmds.DecrementStackPointer());
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
-          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          // sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectReturnAddressFromR5());
           return sb.ToString();
         case "and":
           sb.AppendLine(AND_FUNCTION);
@@ -95,7 +97,8 @@ namespace VMTranslator.Functions
           sb.AppendLine(AsmCmds.DecrementStackPointer());
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
-          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          // sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectReturnAddressFromR5());
           return sb.ToString();
         case "not":
           sb.AppendLine(NOT_FUNCTION);
@@ -103,11 +106,25 @@ namespace VMTranslator.Functions
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
           sb.AppendLine(AsmCmds.Not("D", "D"));
-          sb.AppendLine(AsmCmds.AddOneToD());
+          // sb.AppendLine(AsmCmds.AddOneToD()); TODO: test not on negative numbers
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
           sb.AppendLine(AsmCmds.IncrementStackPointer());
           sb.AppendLine(AsmCmds.IncrementStackPointer());
+          return sb.ToString();
+        case "add":
+          sb.AppendLine(ADD_FUNCTION);
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.Append(AsmCmds.SelectX());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectY());
+          sb.AppendLine(AsmCmds.AddDRegisterToRamValue());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          // sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectReturnAddressFromR5());
           return sb.ToString();
         case "true":
           return WriteTrueFunction();

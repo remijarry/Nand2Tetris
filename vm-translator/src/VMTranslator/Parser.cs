@@ -52,7 +52,7 @@ namespace VMTranslator
         }
         if (Enum.TryParse<CommandName>(line, out var command))
         {
-          WriteTrueFalseFunctions = true;
+
           parsedFile.AddFunction(command.ToString());
           if (command == CommandName.add || command == CommandName.sub || command == CommandName.neg)
           {
@@ -60,6 +60,7 @@ namespace VMTranslator
           }
           else
           {
+            WriteTrueFalseFunctions = true;
             parsedFile.Commands.AddCommand(new LogicalCommand(command, lineIndex));
           }
         }

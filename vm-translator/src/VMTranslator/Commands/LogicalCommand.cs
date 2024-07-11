@@ -8,8 +8,6 @@ namespace VMTranslator.Commands
     public string CommandType => "logical";
     public CommandName CommandName { get; set; }
     public int LineIndex { get; }
-
-
     public LogicalCommand(CommandName name, int lineIndex)
     {
       CommandName = name;

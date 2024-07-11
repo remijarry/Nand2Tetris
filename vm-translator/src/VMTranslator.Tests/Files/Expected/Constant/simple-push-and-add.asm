@@ -17,6 +17,16 @@ M=D
 M=M+1
 
 // add
+@RETURN_ADD_0
+D=A
+@R5
+M=D
+@ADD
+D=A
+0;JMP
+(RETURN_ADD_0)
+@0
+M=M+1(ADD)
 @0
 M=M-1
 @0
@@ -34,6 +44,8 @@ M=M-1
 @0
 A=M
 M=D
-@0
-M=M+1
+@R5
+A=M
+D=M
+0;JMP
 

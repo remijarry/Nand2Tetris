@@ -20,9 +20,6 @@ namespace VMTranslator.Commands
       sb.AppendLine($"// {CommandName}");
       switch (CommandName)
       {
-        case CommandName.add:
-
-          return sb.ToString();
         case CommandName.sub:
           // align to x
           sb.Append(AsmCmds.SelectXAndYFromTheStack());
@@ -39,6 +36,13 @@ namespace VMTranslator.Commands
           sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
           sb.AppendLine(AsmCmds.NegateDRegisterValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          return sb.ToString();
+        case CommandName.add:
+          sb.AppendLine($"@{Constants.Assembly.ADD_RETURN_LABEL_PREFIX}{LineIndex}");
+          sb.Append(AsmCmds.StoreReturnAddressToR5());
+          sb.Append(AsmCmds.JumpToFunction(Constants.Assembly.ADD_FUNCTION_NAME));
+          sb.AppendLine($"({Constants.Assembly.ADD_RETURN_LABEL_PREFIX}{LineIndex})");
           sb.AppendLine(AsmCmds.IncrementStackPointer());
           return sb.ToString();
         default:

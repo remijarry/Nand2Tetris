@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace VMTranslator
@@ -44,7 +45,11 @@ namespace VMTranslator
                     {
                         sb.Append(codeWriter.WriteFunction(func));
                     }
-                    Console.WriteLine(sb.ToString());
+
+                    var finalInstructions = RemoveEmptyLines(sb.ToString());
+                    var outputFilePath = "src/VMTranslator/test-files/test-files.asm";
+
+                    File.WriteAllText(outputFilePath, finalInstructions);
                 }
             }
             catch (IOException e)
@@ -52,6 +57,13 @@ namespace VMTranslator
                 Console.WriteLine($"Error reading the file: {e.Message}");
             }
 
+        }
+
+        private static string RemoveEmptyLines(string input)
+        {
+            var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            var nonEmptyLines = lines.Where(line => !string.IsNullOrWhiteSpace(line));
+            return string.Join(Environment.NewLine, nonEmptyLines);
         }
     }
 }

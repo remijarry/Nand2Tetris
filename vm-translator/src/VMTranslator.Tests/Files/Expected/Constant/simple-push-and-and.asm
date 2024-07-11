@@ -6,7 +6,6 @@ A=M
 M=D
 @0
 M=M+1
-
 // push constant 3
 @3
 D=A
@@ -15,8 +14,18 @@ A=M
 M=D
 @0
 M=M+1
-
 // and
+@RETURN_AND_2
+D=A
+@R5
+M=D
+@AND
+D=A
+0;JMP
+(RETURN_AND_2)
+@0
+M=M+1
+(AND)
 @0
 M=M-1
 @0
@@ -34,6 +43,25 @@ M=M-1
 @0
 A=M
 M=D
+@R5
+A=M
+D=M
+0;JMP
+(TRUE)
 @0
-M=M+1
-
+A=M
+D=-1
+M=D
+@R5
+A=M
+D=M
+0;JMP
+(FALSE)
+@0
+A=M
+D=0
+M=D
+@R5
+A=M
+D=M
+0;JMP
