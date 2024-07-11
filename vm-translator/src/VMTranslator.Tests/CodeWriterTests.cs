@@ -29,7 +29,7 @@ public class CodeWriterTests
 
     var codeWriter = new CodeWriter("test");
     var sb = new StringBuilder();
-    foreach (var cmd in commands.GetCommands())
+    foreach (var cmd in commands.Commands.GetCommands())
     {
       sb.AppendLine(codeWriter.WriteCommand(cmd));
     }
@@ -55,7 +55,7 @@ public class CodeWriterTests
 
     var codeWriter = new CodeWriter("test");
     var sb = new StringBuilder();
-    foreach (var cmd in commands.GetCommands())
+    foreach (var cmd in commands.Commands.GetCommands())
     {
       sb.AppendLine(codeWriter.WriteCommand(cmd));
     }
@@ -85,7 +85,7 @@ public class CodeWriterTests
 
     var codeWriter = new CodeWriter("test");
     var sb = new StringBuilder();
-    foreach (var cmd in commands.GetCommands())
+    foreach (var cmd in commands.Commands.GetCommands())
     {
       sb.AppendLine(codeWriter.WriteCommand(cmd));
     }

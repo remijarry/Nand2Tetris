@@ -12,14 +12,17 @@ namespace VMTranslator
     /// The file to process
     /// </summary>
     private readonly StreamReader _streamReader;
+    private bool WriteTrueFalseFunctions;
     public Parser(StreamReader streamReader)
     {
       _streamReader = streamReader;
     }
 
-    public CommandList Parse()
+    public ParsedFile Parse()
     {
       string line;
+      int lineIndex = 0;
+      var parsedFile = new ParsedFile();
       var list = new CommandList();
       while ((line = _streamReader.ReadLine()) != null)
       {
@@ -42,25 +45,34 @@ namespace VMTranslator
           var segment = tokens[1];
           var index = tokens[2];
 
-          var memoryCommand = new MemoryAccessCommand(action, segment, index);
+          var memoryCommand = new MemoryAccessCommand(action, segment, index, lineIndex++);
+          parsedFile.Commands.AddCommand(memoryCommand);
           list.AddCommand(memoryCommand);
           continue;
         }
         if (Enum.TryParse<CommandName>(line, out var command))
         {
+          WriteTrueFalseFunctions = true;
+          parsedFile.AddFunction(command.ToString());
           if (command == CommandName.add || command == CommandName.sub || command == CommandName.neg)
           {
-            list.AddCommand(new ArithmeticCommand(command));
+            parsedFile.Commands.AddCommand(new ArithmeticCommand(command, lineIndex)); // we want to jump back to the next instruction after the cmd
           }
           else
           {
-            list.AddCommand(new LogicalCommand(command));
+            parsedFile.Commands.AddCommand(new LogicalCommand(command, lineIndex));
           }
         }
 
       }
 
-      return list;
+      if (WriteTrueFalseFunctions)
+      {
+        parsedFile.AddFunction("true");
+        parsedFile.AddFunction("false");
+      }
+
+      return parsedFile;
     }
 
     private bool IsComment(string line)

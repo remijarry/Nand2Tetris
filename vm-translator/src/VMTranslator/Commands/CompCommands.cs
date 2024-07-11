@@ -4,8 +4,10 @@ using System.Text;
 namespace VMTranslator.Commands
 {
   //todo: maybe split this into d instructions, j instructions etc.
-  public class CompCommands
+  //todo: maybe use only one string buffer instead of creating one every time
+  public class AsmCmds
   {
+    private static StringBuilder sb = new StringBuilder();
     #region J instructions
     /// <summary>
     /// 0;JMP
@@ -76,6 +78,11 @@ namespace VMTranslator.Commands
     public static string SetDRegisterToIndex(int index)
     {
       return $"@{index}{Environment.NewLine}D=A";
+    }
+
+    public static string SetDToA()
+    {
+      return "D=A";
     }
 
     /// <summary>
@@ -216,7 +223,7 @@ namespace VMTranslator.Commands
     /// @0;M=M+1
     /// </summary>
     /// <returns></returns>
-    public static string IncrementMemoryStackPointer()
+    public static string IncrementStackPointer()
     {
       return $"@{BaseAddress.SP}{Environment.NewLine}M=M+1";
     }
@@ -225,20 +232,75 @@ namespace VMTranslator.Commands
     /// @0;M=M-1
     /// </summary>
     /// <returns></returns>
-    public static string DecrementMemoryStackPointer()
+    public static string DecrementStackPointer()
     {
       return $"@{BaseAddress.SP}{Environment.NewLine}M=M-1";
     }
 
     public static string SelectXAndYFromTheStack()
     {
-      var sb = new StringBuilder();
-      sb.AppendLine(DecrementMemoryStackPointer());
-      sb.AppendLine(DecrementMemoryStackPointer());
+      sb.Clear();
+      sb.AppendLine(DecrementStackPointer());
+      sb.AppendLine(DecrementStackPointer());
       sb.AppendLine(SelectStackPointerMemoryValue());
       sb.AppendLine(SetDRegistertoRamValue());
-      sb.AppendLine(IncrementMemoryStackPointer());
+      sb.AppendLine(IncrementStackPointer());
       sb.AppendLine(SelectStackPointerMemoryValue());
+      return sb.ToString();
+    }
+
+    public static string StoreReturnAddressToR5()
+    {
+      sb.Clear();
+      sb.AppendLine("D=A");
+      sb.AppendLine("@R5"); //todo: create a class and put symbols in it (r0 > r15 etc.)
+      sb.AppendLine("M=D");
+      return sb.ToString();
+    }
+
+    public static string SelectReturnAddressFromR5()
+    {
+      sb.Clear();
+      sb.AppendLine("@R5");
+      sb.AppendLine("A=M");
+      sb.AppendLine("D=M");
+      sb.AppendLine("0;JMP");
+      return sb.ToString();
+    }
+
+    public static string JumpToFunction(string name)
+    {
+      sb.Clear();
+      sb.AppendLine($"@{name}"); //todo: need a flag to tell us whether or not the function has already been created so we don't create it again
+      sb.AppendLine("D=A");
+      sb.AppendLine("0;JMP");
+      return sb.ToString();
+    }
+
+    public static string SelectX()
+    {
+      sb.Clear();
+      sb.AppendLine("@0");
+      sb.AppendLine("A=M");
+      sb.AppendLine("D=M");
+      return sb.ToString();
+    }
+
+    public static string SelectY()
+    {
+      sb.Clear();
+      sb.AppendLine("@0");
+      sb.AppendLine("A=M");
+      return sb.ToString();
+    }
+
+    public static string JumpToTrueOrFalse(string trueCondition)
+    {
+      sb.Clear();
+      sb.AppendLine($"@TRUE");
+      sb.AppendLine($"D;{trueCondition}");
+      sb.AppendLine($"@FALSE");
+      sb.AppendLine("0;JMP");
       return sb.ToString();
     }
   }

@@ -33,9 +33,16 @@ namespace VMTranslator
 
                     var codeWriter = new CodeWriter(fileName);
                     var sb = new StringBuilder();
-                    foreach (var cmd in commands.GetCommands())
+
+                    var cmds = commands.Commands.GetCommands();
+                    for (var i = 0; i < cmds.Count; i++)
                     {
-                        sb.Append(codeWriter.WriteCommand(cmd));
+                        sb.Append(codeWriter.WriteCommand(cmds[i]));
+                    }
+
+                    foreach (var func in commands.Functions)
+                    {
+                        sb.Append(codeWriter.WriteFunction(func));
                     }
                     Console.WriteLine(sb.ToString());
                 }

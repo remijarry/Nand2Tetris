@@ -6,10 +6,10 @@ namespace VMTranslator.Commands
   public class ArithmeticCommand : ICommand
   {
     public string CommandType => "arithmetic";
-
     public CommandName CommandName { get; set; }
+    public int LineIndex { get; }
 
-    public ArithmeticCommand(CommandName name)
+    public ArithmeticCommand(CommandName name, int lineIndex)
     {
       CommandName = name;
     }
@@ -21,31 +21,25 @@ namespace VMTranslator.Commands
       switch (CommandName)
       {
         case CommandName.add:
-          // align to x
-          sb.Append(CompCommands.SelectXAndYFromTheStack());
-          sb.AppendLine(CompCommands.AddDRegisterToRamValue());
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
-          sb.AppendLine(CompCommands.SetRamValueToDRegister());
-          sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
+
           return sb.ToString();
         case CommandName.sub:
           // align to x
-          sb.Append(CompCommands.SelectXAndYFromTheStack());
-          sb.AppendLine(CompCommands.SubDRegisterToRamValue());
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
-          sb.AppendLine(CompCommands.SetRamValueToDRegister());
-          sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
+          sb.Append(AsmCmds.SelectXAndYFromTheStack());
+          sb.AppendLine(AsmCmds.SubDRegisterToRamValue());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
           return sb.ToString();
         case CommandName.neg:
           // align to y
-          sb.AppendLine(CompCommands.DecrementMemoryStackPointer());
-          sb.AppendLine(CompCommands.SelectStackPointerMemoryValue());
-          sb.AppendLine(CompCommands.SetDRegistertoRamValue());
-          sb.AppendLine(CompCommands.NegateDRegisterValue());
-          sb.AppendLine(CompCommands.SetRamValueToDRegister());
-          sb.AppendLine(CompCommands.IncrementMemoryStackPointer());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
+          sb.AppendLine(AsmCmds.NegateDRegisterValue());
+          sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
           return sb.ToString();
         default:
           return string.Empty;
