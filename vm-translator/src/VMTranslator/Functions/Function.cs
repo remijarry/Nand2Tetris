@@ -9,14 +9,12 @@ namespace VMTranslator.Functions
   public class Function : IFunction
   {
     public string FunctionName { get; }
-
-    #region EQ
     private const string EQ_FUNCTION = "(EQ)";
-    #endregion
-
-    #region GT
     private const string GT_FUNCTION = "(GT)";
-    #endregion
+    private const string LT_FUNCTION = "(LT)";
+    private const string OR_FUNCTION = "(OR)";
+    private const string AND_FUNCTION = "(AND)";
+    private const string NOT_FUNCTION = "(NOT)";
     private const string TRUE_LABEL = "TRUE";
     private const string FALSE_LABEL = "FALSE";
 
@@ -59,6 +57,57 @@ namespace VMTranslator.Functions
           // decrement the pointer by one to store the result
           sb.AppendLine(AsmCmds.DecrementStackPointer());
           sb.AppendLine(AsmCmds.JumpToTrueOrFalse("JGT")); //todo: remove magic string
+          return sb.ToString();
+        case "lt":
+          sb.AppendLine(LT_FUNCTION);
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.Append(AsmCmds.SelectX());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectY());
+          // if (x - y) < y jump to TRUE
+          sb.AppendLine(AsmCmds.SubDRegisterToRamValue());
+          // decrement the pointer by one to store the result
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.JumpToTrueOrFalse("JLT")); //todo: remove magic string
+          return sb.ToString();
+        case "or":
+          sb.AppendLine(OR_FUNCTION);
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.Append(AsmCmds.SelectX());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectY());
+          sb.AppendLine(AsmCmds.Or("D", "D", "M"));
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          return sb.ToString();
+        case "and":
+          sb.AppendLine(AND_FUNCTION);
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.Append(AsmCmds.SelectX());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectY());
+          sb.AppendLine(AsmCmds.And("D", "D", "M"));
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          return sb.ToString();
+        case "not":
+          sb.AppendLine(NOT_FUNCTION);
+          sb.AppendLine(AsmCmds.DecrementStackPointer());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
+          sb.AppendLine(AsmCmds.Not("D", "D"));
+          sb.AppendLine(AsmCmds.AddOneToD());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
           return sb.ToString();
         case "true":
           return WriteTrueFunction();
