@@ -47,3 +47,15 @@ M=D
 A=M
 D=M
 0;JMP
+
+
+x = A
+y = D
+
+x = x + y
+y = x - y
+x = x - y
+
+A=D+A
+D=A-D
+A=A-D

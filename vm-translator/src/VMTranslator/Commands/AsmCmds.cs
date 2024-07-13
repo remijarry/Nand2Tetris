@@ -215,8 +215,47 @@ namespace VMTranslator.Commands
     /// <returns></returns>
     public static string SelectStackPointerMemoryValue()
     {
-      return $"@{BaseAddress.SP}{Environment.NewLine}A=M";
+      return $"{SP()}{Environment.NewLine}A=M";
     }
+
+    /// <summary>
+    /// A=M
+    /// </summary>
+    /// <returns></returns>
+    public static string SetARegisterToMemoryValue()
+    {
+      return "A=M";
+    }
+
+    /// <summary>
+    /// A=D+A
+    /// </summary>
+    /// <returns></returns>
+    public static string AddAandD()
+    {
+      return "A=D+A";
+    }
+
+    /// <summary>
+    /// D=D-A
+    /// </summary>
+    /// <returns></returns>
+    public static string SubAToD()
+    {
+      return "D=D-A";
+    }
+
+    /// <summary>
+    /// A=A-D
+    /// </summary>
+    /// <returns></returns>
+    public static string SubDToA()
+    {
+      return "A=A-D";
+    }
+
+
+
 
     /// <summary>
     /// M=A or M=D
@@ -234,7 +273,7 @@ namespace VMTranslator.Commands
     /// <returns></returns>
     public static string IncrementStackPointer()
     {
-      return $"@{BaseAddress.SP}{Environment.NewLine}M=M+1";
+      return $"{SP()}{Environment.NewLine}M=M+1";
     }
 
     /// <summary>
@@ -258,19 +297,19 @@ namespace VMTranslator.Commands
       return sb.ToString();
     }
 
-    public static string StoreReturnAddressToR5()
+    public static string StoreReturnAddressToR13()
     {
       sb.Clear();
       sb.AppendLine("D=A");
-      sb.AppendLine("@R5"); //todo: create a class and put symbols in it (r0 > r15 etc.)
+      sb.AppendLine(R13()); //todo: create a class and put symbols in it (r0 > r15 etc.)
       sb.AppendLine("M=D");
       return sb.ToString();
     }
 
-    public static string SelectReturnAddressFromR5()
+    public static string SelectReturnAddressFromR13()
     {
       sb.Clear();
-      sb.AppendLine("@R5");
+      sb.AppendLine(R13());
       sb.AppendLine("A=M");
       sb.AppendLine("D=M");
       sb.AppendLine("0;JMP");
@@ -289,7 +328,7 @@ namespace VMTranslator.Commands
     public static string SelectX()
     {
       sb.Clear();
-      sb.AppendLine("@0");
+      sb.AppendLine(SP());
       sb.AppendLine("A=M");
       sb.AppendLine("D=M");
       return sb.ToString();
@@ -298,7 +337,7 @@ namespace VMTranslator.Commands
     public static string SelectY()
     {
       sb.Clear();
-      sb.AppendLine("@0");
+      sb.AppendLine(SP());
       sb.AppendLine("A=M");
       return sb.ToString();
     }
@@ -312,5 +351,30 @@ namespace VMTranslator.Commands
       sb.AppendLine("0;JMP");
       return sb.ToString();
     }
+
+    #region segments
+    /// <summary>
+    /// @SP
+    /// </summary>
+    /// <returns></returns>
+    public static string SP()
+    {
+      return $"@{BaseAddress.SP}";
+    }
+    /// <summary>
+    /// @LCL
+    /// </summary>
+    /// <returns></returns>
+    public static string LCL()
+    {
+      return $"@{BaseAddress.LCL}";
+    }
+    #endregion
+    # region any purpose registers
+    public static string R13()
+    {
+      return "@R13";
+    }
+    #endregion
   }
 }

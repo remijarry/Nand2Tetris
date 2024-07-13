@@ -40,7 +40,7 @@ namespace VMTranslator.Commands
           return sb.ToString();
         case CommandName.add:
           sb.AppendLine($"@{Constants.Assembly.ADD_RETURN_LABEL_PREFIX}{LineIndex}");
-          sb.Append(AsmCmds.StoreReturnAddressToR5());
+          sb.Append(AsmCmds.StoreReturnAddressToR13());
           sb.Append(AsmCmds.JumpToFunction(Constants.Assembly.ADD_FUNCTION_NAME));
           sb.AppendLine($"({Constants.Assembly.ADD_RETURN_LABEL_PREFIX}{LineIndex})");
           sb.AppendLine(AsmCmds.IncrementStackPointer());

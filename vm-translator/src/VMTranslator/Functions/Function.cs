@@ -84,7 +84,7 @@ namespace VMTranslator.Functions
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
           // sb.AppendLine(AsmCmds.IncrementStackPointer());
-          sb.Append(AsmCmds.SelectReturnAddressFromR5());
+          sb.Append(AsmCmds.SelectReturnAddressFromR13());
           return sb.ToString();
         case "and":
           sb.AppendLine(AND_FUNCTION);
@@ -98,7 +98,7 @@ namespace VMTranslator.Functions
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
           // sb.AppendLine(AsmCmds.IncrementStackPointer());
-          sb.Append(AsmCmds.SelectReturnAddressFromR5());
+          sb.Append(AsmCmds.SelectReturnAddressFromR13());
           return sb.ToString();
         case "not":
           sb.AppendLine(NOT_FUNCTION);
@@ -124,7 +124,7 @@ namespace VMTranslator.Functions
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
           // sb.AppendLine(AsmCmds.IncrementStackPointer());
-          sb.Append(AsmCmds.SelectReturnAddressFromR5());
+          sb.Append(AsmCmds.SelectReturnAddressFromR13());
           return sb.ToString();
         case "true":
           return WriteTrueFunction();
@@ -145,7 +145,7 @@ namespace VMTranslator.Functions
       sb.AppendLine("D=-1");
       sb.AppendLine("M=D");
       // select the return address
-      sb.Append(AsmCmds.SelectReturnAddressFromR5());
+      sb.Append(AsmCmds.SelectReturnAddressFromR13());
       return sb.ToString();
     }
 
@@ -160,7 +160,7 @@ namespace VMTranslator.Functions
       sb.AppendLine("D=0");
       sb.AppendLine("M=D");
       // select the return address
-      sb.Append(AsmCmds.SelectReturnAddressFromR5());
+      sb.Append(AsmCmds.SelectReturnAddressFromR13());
       return sb.ToString();
     }
 
