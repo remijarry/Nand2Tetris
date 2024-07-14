@@ -23,5 +23,6 @@ namespace VMTranslator
     /// THAT segment within the heap
     /// </summary>
     public const int THAT = 4;
+    public const int TEMP = 5;
   }
 }

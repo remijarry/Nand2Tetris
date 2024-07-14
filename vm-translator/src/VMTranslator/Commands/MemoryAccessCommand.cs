@@ -21,6 +21,7 @@ namespace VMTranslator.Commands
       {VirtualSegment.ARGUMENT, BaseAddress.ARG},
       {VirtualSegment.THIS, BaseAddress.THIS},
       {VirtualSegment.THAT, BaseAddress.THAT},
+      {VirtualSegment.TEMP, BaseAddress.TEMP},
     };
 
     public MemoryAccessCommand(string name, string segment, string index, int lineIndex)
@@ -55,23 +56,39 @@ namespace VMTranslator.Commands
           return WritePushCommand(Index);
         case CommandName.pop:
           sb.AppendLine(AsmCmds.DecrementStackPointer());
-          // select segment and store in D register
-          sb.AppendLine($"@{SegmentAddresses[Segment]}");
-          sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
-          sb.AppendLine(AsmCmds.SetDToA());
-          // pop segment i
-          sb.AppendLine($"@{Index}");
-          sb.AppendLine(AsmCmds.AddDRegisterToARegister());
-          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
-          // swap A and D
-          // D=D+A
-          // A=D-A
-          // D=D-A
+          if (Segment.Equals(VirtualSegment.TEMP))
+          {
+            sb.AppendLine($"@{SegmentAddresses[Segment] + Index}");
+            sb.AppendLine($"D=A");
+            sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+            sb.AppendLine("D=D+M");
+            sb.AppendLine("A=D-M");
+            sb.AppendLine("D=D-A");
+            sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
+          }
+          else
+          {
+            sb.AppendLine($"@{SegmentAddresses[Segment]}");
+            // select segment and store in D register
+            sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+            sb.AppendLine(AsmCmds.SetDToA());
+            // pop segment i
+            sb.AppendLine($"@{Index}");
+            sb.AppendLine(AsmCmds.AddDRegisterToARegister());
+            sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+            // swap A and D
+            // D=D+A
+            // A=D-A
+            // D=D-A
 
-          sb.AppendLine("D=D+M");
-          sb.AppendLine("A=D-M");
-          sb.AppendLine("D=D-A");
-          sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
+            sb.AppendLine("D=D+M");
+            sb.AppendLine("A=D-M");
+            sb.AppendLine("D=D-A");
+            sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
+          }
+
+
+
 
           return sb.ToString();
         default:
@@ -82,6 +99,7 @@ namespace VMTranslator.Commands
     private string WritePushCommand(int index)
     {
       var sb = new StringBuilder();
+      sb.AppendLine($"// push {Segment} {index}");
       sb.AppendLine(AsmCmds.SetDRegisterToIndex(index));
       sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
       sb.AppendLine(AsmCmds.SetMemoryValueFrom("D"));

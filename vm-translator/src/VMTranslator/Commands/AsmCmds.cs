@@ -80,6 +80,10 @@ namespace VMTranslator.Commands
       return $"@{index}{Environment.NewLine}D=A";
     }
 
+    /// <summary>
+    /// D=A
+    /// </summary>
+    /// <returns></returns>
     public static string SetDToA()
     {
       return "D=A";
