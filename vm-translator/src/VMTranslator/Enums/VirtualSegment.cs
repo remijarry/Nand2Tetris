@@ -7,6 +7,7 @@ namespace VMTranslator.Enums
     ARGUMENT,
     TEMP,
     THIS,
-    THAT
+    THAT,
+    POINTER,
   }
 }

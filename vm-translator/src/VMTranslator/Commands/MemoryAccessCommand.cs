@@ -67,6 +67,25 @@ namespace VMTranslator.Commands
             sb.AppendLine("D=D-A");
             sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
           }
+          else if (Segment.Equals(VirtualSegment.POINTER))
+          {
+            sb.AppendLine($"@{SegmentAddresses[VirtualSegment.CONSTANT]}");
+            sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+            sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
+            // 0 = this
+            // pop the value in memory address 3
+            if (Index == 0)
+            {
+              sb.AppendLine($"@{SegmentAddresses[VirtualSegment.THIS]}");
+            }
+            // 1 = that
+            // pop the value in memory address 3
+            else
+            {
+              sb.AppendLine($"@{SegmentAddresses[VirtualSegment.THAT]}");
+            }
+            sb.AppendLine(AsmCmds.SetRamValueToDRegister());
+          }
           else
           {
             sb.AppendLine($"@{SegmentAddresses[Segment]}");
@@ -131,8 +150,23 @@ namespace VMTranslator.Commands
           sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
           sb.AppendLine(AsmCmds.IncrementStackPointer());
           break;
-
-
+        case VirtualSegment.POINTER:
+          // 0 = this
+          // 1 = that
+          if (Index == 0)
+          {
+            sb.AppendLine($"@{SegmentAddresses[VirtualSegment.THIS]}");
+          }
+          else
+          {
+            sb.AppendLine($"@{SegmentAddresses[VirtualSegment.THAT]}");
+          }
+          sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+          sb.AppendLine(AsmCmds.SetDToA());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetMemoryValueFrom("D"));
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          break;
       }
 
 

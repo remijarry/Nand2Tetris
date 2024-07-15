@@ -10,92 +10,72 @@ M=D
 D=A
 @2
 M=D
-@3000
+// push CONSTANT 3030
+@3030
 D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// pop pointer 0
+@0
+M=M-1
+@0
+A=M
+D=M
 @3
 M=D
-@3010
+// push CONSTANT 3040
+@3040
 D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// pop pointer 1
+@0
+M=M-1
+@0
+A=M
+D=M
 @4
 M=D
-// push CONSTANT 10
-@10
+// push CONSTANT 32
+@32
 D=A
 @0
 A=M
 M=D
 @0
 M=M+1
-// pop local 3
-@0
-M=M-1
-@1
-A=M
-D=A
-@3
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// push CONSTANT 21
-@21
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// push CONSTANT 22
-@22
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop argument 2
-@0
-M=M-1
-@2
-A=M
-D=A
-@2
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// pop argument 1
-@0
-M=M-1
-@2
-A=M
-D=A
-@1
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// push CONSTANT 36
-@36
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop this 6
+// pop this 2
 @0
 M=M-1
 @3
+A=M
+D=A
+@2
+D=D+A
+@0
+A=M
+D=D+M
+A=D-M
+D=D-A
+M=D
+// push CONSTANT 46
+@46
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// pop that 6
+@0
+M=M-1
+@4
 A=M
 D=A
 @6
@@ -106,117 +86,40 @@ D=D+M
 A=D-M
 D=D-A
 M=D
-// push CONSTANT 42
-@42
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// push CONSTANT 45
-@45
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop that 5
-@0
-M=M-1
-@4
-A=M
-D=A
-@5
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// pop that 2
-@0
-M=M-1
-@4
-A=M
-D=A
-@2
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// push CONSTANT 510
-@510
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop temp 6
-@0
-M=M-1
-@11
-D=A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// push LOCAL 3
-@1
-A=M
-D=A
+// push POINTER 0
 @3
-D=D+A
-@R13
-M=D
-@R13
 A=M
-D=M
+D=A
 @0
 A=M
 M=D
 @0
 M=M+1
-// push THAT 5
+// push POINTER 1
 @4
 A=M
 D=A
-@5
-D=D+A
-@R13
-M=D
-@R13
-A=M
-D=M
 @0
 A=M
 M=D
 @0
 M=M+1
 // add
-@RETURN_ADD_16
+@RETURN_ADD_10
 D=A
 @R13
 M=D
 @ADD
 D=A
 0;JMP
-(RETURN_ADD_16)
+(RETURN_ADD_10)
 @0
 M=M+1
-// push ARGUMENT 1
-@2
+// push THIS 2
+@3
 A=M
 D=A
-@1
+@2
 D=D+A
 @R13
 M=D
@@ -248,24 +151,8 @@ A=M
 M=D
 @0
 M=M+1
-// push THIS 6
-@3
-A=M
-D=A
-@6
-D=D+A
-@R13
-M=D
-@R13
-A=M
-D=M
-@0
-A=M
-M=D
-@0
-M=M+1
-// push THIS 6
-@3
+// push THAT 6
+@4
 A=M
 D=A
 @6
@@ -281,54 +168,14 @@ M=D
 @0
 M=M+1
 // add
-@RETURN_ADD_19
+@RETURN_ADD_12
 D=A
 @R13
 M=D
 @ADD
 D=A
 0;JMP
-(RETURN_ADD_19)
-@0
-M=M+1
-// sub
-@0
-M=M-1
-@0
-M=M-1
-@0
-A=M
-D=M
-@0
-M=M+1
-@0
-A=M
-D=D-M
-@0
-M=M-1
-@0
-A=M
-M=D
-@0
-M=M+1
-// push TEMP 6
-@11
-A=M
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// add
-@RETURN_ADD_20
-D=A
-@R13
-M=D
-@ADD
-D=A
-0;JMP
-(RETURN_ADD_20)
+(RETURN_ADD_12)
 @0
 M=M+1
 (ADD)
