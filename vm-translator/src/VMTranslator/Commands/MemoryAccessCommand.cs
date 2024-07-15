@@ -86,6 +86,16 @@ namespace VMTranslator.Commands
             }
             sb.AppendLine(AsmCmds.SetRamValueToDRegister());
           }
+          else if (Segment.Equals(VirtualSegment.STATIC))
+          {
+            sb.AppendLine($"@{SegmentAddresses[VirtualSegment.CONSTANT]}");
+            sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+            sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
+            sb.AppendLine($"@{CodeWriter.StaticPointer}");
+            sb.AppendLine($"M=D");
+            CodeWriter.IndexToMemAddr.Add(Index, CodeWriter.StaticPointer);
+            CodeWriter.StaticPointer++;
+          }
           else
           {
             sb.AppendLine($"@{SegmentAddresses[Segment]}");
@@ -163,6 +173,16 @@ namespace VMTranslator.Commands
           }
           sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
           sb.AppendLine(AsmCmds.SetDToA());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetMemoryValueFrom("D"));
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          break;
+        case VirtualSegment.STATIC:
+          // get memory address of the Index value
+          var memAddr = CodeWriter.IndexToMemAddr[Index];
+          sb.AppendLine($"@{memAddr}");
+          sb.AppendLine("A=M");
+          sb.AppendLine("D=A");
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetMemoryValueFrom("D"));
           sb.AppendLine(AsmCmds.IncrementStackPointer());

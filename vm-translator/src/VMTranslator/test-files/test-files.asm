@@ -10,122 +10,75 @@ M=D
 D=A
 @2
 M=D
-// push CONSTANT 3030
-@3030
+@3000
+D=A
+@3
+M=D
+@3010
+D=A
+@4
+M=D
+// push CONSTANT 111
+@111
 D=A
 @0
 A=M
 M=D
 @0
 M=M+1
-// pop pointer 0
+// push CONSTANT 333
+@333
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// push CONSTANT 888
+@888
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// pop static 8
 @0
 M=M-1
 @0
 A=M
 D=M
-@3
+@16
 M=D
-// push CONSTANT 3040
-@3040
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop pointer 1
+// pop static 3
 @0
 M=M-1
 @0
 A=M
 D=M
-@4
+@17
 M=D
-// push CONSTANT 32
-@32
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop this 2
+// pop static 1
 @0
 M=M-1
-@3
-A=M
-D=A
-@2
-D=D+A
 @0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// push CONSTANT 46
-@46
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// pop that 6
-@0
-M=M-1
-@4
-A=M
-D=A
-@6
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// push POINTER 0
-@3
-A=M
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// push POINTER 1
-@4
-A=M
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// add
-@RETURN_ADD_10
-D=A
-@R13
-M=D
-@ADD
-D=A
-0;JMP
-(RETURN_ADD_10)
-@0
-M=M+1
-// push THIS 2
-@3
-A=M
-D=A
-@2
-D=D+A
-@R13
-M=D
-@R13
 A=M
 D=M
+@18
+M=D
+// push STATIC 3
+@17
+A=M
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// push STATIC 1
+@18
+A=M
+D=A
 @0
 A=M
 M=D
@@ -151,31 +104,24 @@ A=M
 M=D
 @0
 M=M+1
-// push THAT 6
-@4
+// push STATIC 8
+@16
 A=M
 D=A
-@6
-D=D+A
-@R13
-M=D
-@R13
-A=M
-D=M
 @0
 A=M
 M=D
 @0
 M=M+1
 // add
-@RETURN_ADD_12
+@RETURN_ADD_9
 D=A
 @R13
 M=D
 @ADD
 D=A
 0;JMP
-(RETURN_ADD_12)
+(RETURN_ADD_9)
 @0
 M=M+1
 (ADD)
