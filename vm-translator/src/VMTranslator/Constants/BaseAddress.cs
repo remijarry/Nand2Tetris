@@ -1,4 +1,4 @@
-namespace VMTranslator
+namespace VMTranslator.Constants
 {
   public static class BaseAddress
   {

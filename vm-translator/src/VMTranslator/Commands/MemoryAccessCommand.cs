@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using VMTranslator.Constants;
 using VMTranslator.Enums;
 
 namespace VMTranslator.Commands
@@ -53,7 +54,7 @@ namespace VMTranslator.Commands
       switch (CommandName)
       {
         case CommandName.push:
-          return WritePushCommand(Index);
+          return WritePushCommand();
         case CommandName.pop:
           sb.AppendLine(AsmCmds.DecrementStackPointer());
           if (Segment.Equals(VirtualSegment.TEMP))
@@ -73,37 +74,69 @@ namespace VMTranslator.Commands
             sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
             sb.AppendLine(AsmCmds.SetDToA());
             // pop segment i
+            // addr = segment base address + i
             sb.AppendLine($"@{Index}");
             sb.AppendLine(AsmCmds.AddDRegisterToARegister());
             sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
             // swap A and D
-            // D=D+A
-            // A=D-A
-            // D=D-A
 
             sb.AppendLine("D=D+M");
             sb.AppendLine("A=D-M");
             sb.AppendLine("D=D-A");
             sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
           }
-
-
-
-
           return sb.ToString();
         default:
           throw new NotSupportedException();
       }
       throw new NotImplementedException();
     }
-    private string WritePushCommand(int index)
+    private string WritePushCommand()
     {
       var sb = new StringBuilder();
-      sb.AppendLine($"// push {Segment} {index}");
-      sb.AppendLine(AsmCmds.SetDRegisterToIndex(index));
-      sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
-      sb.AppendLine(AsmCmds.SetMemoryValueFrom("D"));
-      sb.AppendLine(AsmCmds.IncrementStackPointer());
+      sb.AppendLine($"// push {Segment} {Index}");
+      switch (Segment)
+      {
+        case VirtualSegment.CONSTANT:
+          sb.AppendLine(AsmCmds.SetDRegisterToIndex(Index));
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetMemoryValueFrom("D"));
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          break;
+        case VirtualSegment.TEMP:
+          sb.AppendLine($"@{SegmentAddresses[Segment] + Index}");
+          sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+          sb.AppendLine(AsmCmds.SetDToA());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          break;
+        case VirtualSegment.LOCAL:
+        case VirtualSegment.ARGUMENT:
+        case VirtualSegment.THAT:
+        case VirtualSegment.THIS:
+          sb.AppendLine($"@{SegmentAddresses[Segment]}");
+          // select segment and store in D register
+          sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+          sb.AppendLine(AsmCmds.SetDToA());
+          sb.AppendLine($"@{Index}");
+          // D contains the memory address
+          sb.AppendLine(AsmCmds.AddDRegisterToARegister());
+          sb.AppendLine("@R13");
+          sb.AppendLine("M=D");
+          sb.AppendLine("@R13");
+          sb.AppendLine(AsmCmds.SetARegisterToMemoryValue());
+          sb.AppendLine(AsmCmds.SetDRegistertoRamValue());
+          sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
+          sb.AppendLine(AsmCmds.SetMemoryValueFrom(DRegister));
+          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          break;
+
+
+      }
+
+
+
       return sb.ToString();
     }
   }

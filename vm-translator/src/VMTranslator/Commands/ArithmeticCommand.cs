@@ -12,6 +12,7 @@ namespace VMTranslator.Commands
     public ArithmeticCommand(CommandName name, int lineIndex)
     {
       CommandName = name;
+      LineIndex = lineIndex;
     }
 
     public string GetAssemblyCode()
