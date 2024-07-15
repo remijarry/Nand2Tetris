@@ -109,8 +109,7 @@ namespace VMTranslator.Functions
           // sb.AppendLine(AsmCmds.AddOneToD()); TODO: test not on negative numbers
           sb.AppendLine(AsmCmds.SelectStackPointerMemoryValue());
           sb.AppendLine(AsmCmds.SetRamValueToDRegister());
-          sb.AppendLine(AsmCmds.IncrementStackPointer());
-          sb.AppendLine(AsmCmds.IncrementStackPointer());
+          sb.Append(AsmCmds.SelectReturnAddressFromR13());
           return sb.ToString();
         case "add":
           sb.AppendLine(ADD_FUNCTION);

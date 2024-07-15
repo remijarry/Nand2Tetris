@@ -44,18 +44,18 @@ namespace VMTranslator
       return command.GetAssemblyCode();
     }
 
-    public string WritePopCommand(MemoryAccessCommand command)
-    {
-      StringBuilder sb = new();
-      // decrement stack pointer
-      sb.AppendLine("@0");
-      sb.AppendLine("M=M+1");
-      return sb.ToString();
-    }
-
     public void SetFileName(string fileName)
     {
       // todo
+    }
+
+    public string WriteEnd()
+    {
+      var sb = new StringBuilder();
+      sb.AppendLine("(END)");
+      sb.AppendLine("@END");
+      sb.AppendLine("0;JMP");
+      return sb.ToString();
     }
   }
 }

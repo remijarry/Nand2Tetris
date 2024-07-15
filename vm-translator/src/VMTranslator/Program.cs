@@ -41,6 +41,8 @@ namespace VMTranslator
                         sb.Append(codeWriter.WriteCommand(cmds[i]));
                     }
 
+                    sb.Append(codeWriter.WriteEnd());
+
                     foreach (var func in commands.Functions)
                     {
                         sb.Append(codeWriter.WriteFunction(func));
@@ -67,3 +69,5 @@ namespace VMTranslator
         }
     }
 }
+
+// neg should not increment *SP after operation
