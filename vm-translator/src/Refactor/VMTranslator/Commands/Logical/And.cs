@@ -1,3 +1,6 @@
+using System;
+using System.Text;
+
 namespace VMTranslator.Commands.Logical
 {
     public class And : ICommand
@@ -5,6 +8,7 @@ namespace VMTranslator.Commands.Logical
         public string Execute()
         {
             return
+                "(AND)" +
                 $"@{Constants.StackPointer}" +
                 "M=M-1" +
                 $"@{Constants.StackPointer}" +
@@ -20,24 +24,13 @@ namespace VMTranslator.Commands.Logical
                 $"@{Constants.StackPointer}" +
                 "M=M-1" +
                 $"@{Constants.StackPointer}" +
-                "A=M";
+                "A=M" +
+                "M=D";
+        }
 
-
+        public StringBuilder Execute(StringBuilder sb)
+        {
+            throw new NotImplementedException();
         }
     }
 }
-
-// $"@{Constants.StackPointer}",
-//                 "AM=M-1",
-//                 "D=M",
-//                 "@R13",
-//                 "M=D",
-//                 $"@{Constants.StackPointer}",
-//                 "A=M-1",
-//                 "D=M",
-//                 "@R13",
-//                 "A=M",
-//                 "D=D&A",
-//                 $"@{Constants.StackPointer}",
-//                 "A=M-1",
-//                 "M=D"

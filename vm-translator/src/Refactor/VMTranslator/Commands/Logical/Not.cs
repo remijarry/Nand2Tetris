@@ -1,8 +1,10 @@
+using System.Text;
+
 namespace VMTranslator.Commands.Logical
 {
     public class Not : ICommand
     {
-        public string Execute()
+        public StringBuilder Execute(StringBuilder sb)
         {
             throw new System.NotImplementedException();
         }

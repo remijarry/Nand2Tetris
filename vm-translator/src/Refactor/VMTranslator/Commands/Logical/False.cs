@@ -1,8 +1,8 @@
 using System.Text;
 
-namespace VMTranslator.Commands.Stack
+namespace VMTranslator.Commands.Logical
 {
-    public class Push : ICommand
+    public class False : ICommand
     {
         public StringBuilder Execute(StringBuilder sb)
         {

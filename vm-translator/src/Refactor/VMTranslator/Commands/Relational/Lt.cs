@@ -1,13 +1,25 @@
+using System.Text;
+
 namespace VMTranslator.Commands.Relational
 {
     /// <summary>
     /// Less than
     /// </summary>
-    public class Lt : ICommand
+    public class Lt : RelationalCommand, ICommand
     {
-        public string Execute()
+        public StringBuilder Execute(StringBuilder sb)
         {
-            throw new System.NotImplementedException();
+            return GetAsm(sb);
+        }
+
+        protected override string GetFunctionName()
+        {
+            return "(LT)";
+        }
+
+        protected override string GetJumpCondition()
+        {
+            return "D;JLT";
         }
     }
 }

@@ -1,13 +1,26 @@
+using System.Text;
+
 namespace VMTranslator.Commands.Relational
 {
     /// <summary>
     /// Equals
     /// </summary>
-    public class Eq : ICommand
+    public class Eq : RelationalCommand, ICommand
     {
-        public string Execute()
+
+        public StringBuilder Execute(StringBuilder sb)
         {
-            throw new System.NotImplementedException();
+            return GetAsm(sb);
+        }
+
+        protected override string GetFunctionName()
+        {
+            return "(LT)";
+        }
+
+        protected override string GetJumpCondition()
+        {
+            return "D;JEQ";
         }
     }
 }
