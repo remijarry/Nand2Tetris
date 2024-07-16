@@ -1,17 +1,10 @@
-using System.Text;
-
 namespace VMTranslator.Commands.Relational
 {
     /// <summary>
     /// Less than
     /// </summary>
-    public class Lt : RelationalCommand, ICommand
+    public class Lt : RelationalCommand
     {
-        public StringBuilder Execute(StringBuilder sb)
-        {
-            return GetAsm(sb);
-        }
-
         protected override string GetFunctionName()
         {
             return "(LT)";

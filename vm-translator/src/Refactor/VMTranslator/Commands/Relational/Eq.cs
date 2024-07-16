@@ -1,17 +1,10 @@
-using System.Text;
-
 namespace VMTranslator.Commands.Relational
 {
     /// <summary>
     /// Equals
     /// </summary>
-    public class Eq : RelationalCommand, ICommand
+    public class Eq : RelationalCommand
     {
-
-        public StringBuilder Execute(StringBuilder sb)
-        {
-            return GetAsm(sb);
-        }
 
         protected override string GetFunctionName()
         {

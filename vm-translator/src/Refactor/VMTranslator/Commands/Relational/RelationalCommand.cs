@@ -1,11 +1,10 @@
-using System;
 using System.Text;
 
 namespace VMTranslator.Commands.Relational
 {
-  public abstract class RelationalCommand
+  public abstract class RelationalCommand : ICommand
   {
-    public StringBuilder GetAsm(StringBuilder sb)
+    public StringBuilder Execute(StringBuilder sb)
     {
       sb.AppendLine(GetFunctionName());
 
