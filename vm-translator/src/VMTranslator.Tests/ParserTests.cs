@@ -14,7 +14,5 @@ public class ParserTests
 
         var parser = new Parser(sr);
         var result = parser.Parse();
-        var c = 2;
-
     }
 }

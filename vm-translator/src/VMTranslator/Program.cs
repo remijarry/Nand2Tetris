@@ -9,15 +9,6 @@ namespace VMTranslator
     {
         static void Main(string[] args)
         {
-            // You have already handled the constant segment.
-            // 1. Next, handle the segments local, argument, this, and that.
-            // 2. Next, handle the pointer and temp segments, in particular allowing modiﬁca-
-            // tion of the bases of the this and that segments.
-            // 3. Finally, handle the static segment.
-            // dotnet VMTranslator MyProg.vm
-
-            Console.WriteLine("Hello, World!");
-
             if (string.IsNullOrWhiteSpace(args[0]))
             {
                 Console.WriteLine("Usage: dotnet VMTranslator <filename>");
@@ -25,6 +16,12 @@ namespace VMTranslator
             }
 
             var fileName = args[0];
+
+            if (!File.Exists(fileName))
+            {
+                Console.WriteLine($"The file {fileName} does not exist.");
+                return;
+            }
             try
             {
                 using (StreamReader sr = new StreamReader(fileName))
@@ -49,8 +46,9 @@ namespace VMTranslator
                     }
 
                     var finalInstructions = RemoveEmptyLines(sb.ToString());
-                    var outputFilePath = "src/VMTranslator/test-files/test-files.asm";
-
+                    var inputDirectory = Path.GetDirectoryName(fileName);
+                    string inputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    string outputFilePath = Path.Combine(inputDirectory, $"{inputFileNameWithoutExtension}.asm");
                     File.WriteAllText(outputFilePath, finalInstructions);
                 }
             }
@@ -58,7 +56,6 @@ namespace VMTranslator
             {
                 Console.WriteLine($"Error reading the file: {e.Message}");
             }
-
         }
 
         private static string RemoveEmptyLines(string input)
@@ -69,5 +66,3 @@ namespace VMTranslator
         }
     }
 }
-
-// neg should not increment *SP after operation
