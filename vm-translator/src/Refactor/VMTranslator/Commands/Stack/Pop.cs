@@ -1,7 +1,10 @@
 namespace VMTranslator.Commands.Stack
 {
-  public class Pop
+  public abstract class Pop : ICommand
   {
-
+    public string Execute()
+    {
+      throw new System.NotImplementedException();
+    }
   }
 }
