@@ -1,4 +1,5 @@
 using System.Text;
+using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Arithmetic
 {
@@ -12,7 +13,7 @@ namespace VMTranslator.Commands.Arithmetic
       sb.AppendLine(SelectSecondValue());
       sb.AppendLine(GetOperand());
       sb.AppendLine(PushResult());
-      sb.AppendLine($"@{Constants.R13}");
+      sb.AppendLine($"@{Pointers.R13}");
       sb.AppendLine("A=M");
       sb.AppendLine("D=M");
       sb.AppendLine("0;JMP");
@@ -30,7 +31,7 @@ namespace VMTranslator.Commands.Arithmetic
 
     private static string SelectFirstValue()
     {
-      return $"@{Constants.StackPointer}" +
+      return $"@{Pointers.STACK}" +
               "A=M" +
               "D=M";
     }

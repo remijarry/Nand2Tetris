@@ -1,4 +1,5 @@
 using System;
+using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Arithmetic
 {
@@ -6,7 +7,7 @@ namespace VMTranslator.Commands.Arithmetic
     {
         protected override string DecrementPointer()
         {
-            return $"@{Constants.StackPointer}" +
+            return $"@{Pointers.STACK}" +
                     $"{Environment.NewLine}" +
                     "M=M-1";
         }

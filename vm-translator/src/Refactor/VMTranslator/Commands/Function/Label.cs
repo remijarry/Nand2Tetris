@@ -1,4 +1,5 @@
 using System.Text;
+using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Function
 {
@@ -24,7 +25,7 @@ namespace VMTranslator.Commands.Function
       // The function will jump back to return label.
       sb.AppendLine($"@RETURN_{FunctionName}_{Index}");
       sb.AppendLine("D=A");
-      sb.AppendLine($"@{Constants.R13}");
+      sb.AppendLine($"@{Pointers.R13}");
       sb.AppendLine($"M=D");
       sb.AppendLine($"@{FunctionName}");
       sb.AppendLine("D=A");

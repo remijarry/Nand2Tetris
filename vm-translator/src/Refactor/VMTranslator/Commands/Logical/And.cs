@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Logical
 {
@@ -9,21 +10,21 @@ namespace VMTranslator.Commands.Logical
         {
             return
                 "(AND)" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "M=M-1" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "M=M-1" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "A=M" +
                 "D=M" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "M=M+1" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "A=M" +
                 "D=D&M" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "M=M-1" +
-                $"@{Constants.StackPointer}" +
+                $"@{Pointers.STACK}" +
                 "A=M" +
                 "M=D";
         }

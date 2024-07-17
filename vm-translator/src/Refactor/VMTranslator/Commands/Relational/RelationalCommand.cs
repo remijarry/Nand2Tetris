@@ -1,4 +1,5 @@
 using System.Text;
+using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Relational
 {
@@ -8,19 +9,19 @@ namespace VMTranslator.Commands.Relational
     {
       sb.AppendLine(GetFunctionName());
 
-      sb.AppendLine($"@{Constants.StackPointer}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=M-1");
-      sb.AppendLine($"@{Constants.StackPointer}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=M-1");
-      sb.AppendLine($"@{Constants.StackPointer}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("A=M");
       sb.AppendLine("D=M");
-      sb.AppendLine($"@{Constants.StackPointer}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=M+1");
-      sb.AppendLine($"@{Constants.StackPointer}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("A=M");
       sb.AppendLine("D=D-M");
-      sb.AppendLine($"@{Constants.StackPointer}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=M-1");
       sb.AppendLine("@TRUE");
 
