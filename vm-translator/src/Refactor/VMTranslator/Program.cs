@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using VMTranslator.Parsing;
+using VMTranslator.Translation;
 
 namespace VMTranslator
 {
@@ -22,6 +23,9 @@ namespace VMTranslator
                 {
                     var parser = new Parser(sr);
                     var commandList = parser.Parse();
+
+                    var translator = new Translator(commandList);
+                    var asm = translator.Translate();
                 }
             }
             catch (IOException e)

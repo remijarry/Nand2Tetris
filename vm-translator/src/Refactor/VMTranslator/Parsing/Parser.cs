@@ -65,6 +65,10 @@ namespace VMTranslator.Parsing
               break;
           }
         }
+        else
+        {
+
+        }
 
         if (line.StartsWith(CommandName.ADD))
         {
@@ -166,6 +170,8 @@ namespace VMTranslator.Parsing
         }
 
       }
+
+
       return list;
     }
 

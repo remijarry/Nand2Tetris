@@ -8,7 +8,7 @@ namespace VMTranslator.Commands.Relational
 
         protected override string GetFunctionName()
         {
-            return "(LT)";
+            return "(EQ)";
         }
 
         protected override string GetJumpCondition()

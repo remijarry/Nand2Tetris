@@ -23,7 +23,7 @@ namespace VMTranslator.Commands.Function
     {
       // We set R13 to the return memory address and we jump to the function.
       // The function will jump back to return label.
-      sb.AppendLine($"@RETURN_{FunctionName}_{Index}");
+      sb.AppendLine($"@RETURN_{FunctionName.ToUpper()}_{Index}");
       sb.AppendLine("D=A");
       sb.AppendLine($"@{Pointers.R13}");
       sb.AppendLine($"M=D");
