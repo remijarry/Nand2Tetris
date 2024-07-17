@@ -3,18 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using VMTranslator.Commands;
 using VMTranslator.Commands.Arithmetic;
+using VMTranslator.Commands.Control;
 using VMTranslator.Commands.Function;
 using VMTranslator.Commands.Logical;
 using VMTranslator.Commands.Memory;
 using VMTranslator.Commands.Relational;
 using VMTranslator.Constants;
-using Type = VMTranslator.Commands.Stack.Type;
+using StackOperation = VMTranslator.Commands.Stack.StackOperation;
 
 namespace VMTranslator.Parsing
 {
   public class Parser
   {
     private readonly StreamReader _streamReader;
+
+    private readonly Dictionary<string, Func<ICommand>> _commandMap = new Dictionary<string, Func<ICommand>>()
+    {
+        { CommandName.ADD, () => new Add() },
+        { CommandName.SUB, () => new Sub() },
+        { CommandName.NEG, () => new Neg() },
+        { CommandName.AND, () => new And() },
+        { CommandName.NOT, () => new Not() },
+        { CommandName.OR, () => new Or() },
+        { CommandName.EQ, () => new Eq() },
+        { CommandName.LT, () => new Lt() },
+        { CommandName.GT, () => new Gt() }
+    };
 
     public Parser(StreamReader streamReader)
     {
@@ -23,7 +37,7 @@ namespace VMTranslator.Parsing
 
     public List<ICommand> Parse()
     {
-      var functionSeen = new HashSet<string>();
+      var functionSeen = new Dictionary<string, ICommand>();
       var list = new List<ICommand>();
 
       string line;
@@ -54,123 +68,76 @@ namespace VMTranslator.Parsing
           switch (memorySegment)
           {
             case MemorySegment.CONSTANT:
-              if (Enum.TryParse<Type>(typeStr.ToUpper(), out var type))
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var constant))
               {
-                list.Add(new Constant(type, index));
+                list.Add(new Constant(constant, index));
               }
-              else
+              break;
+            case MemorySegment.TEMP:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var temp))
               {
-                throw new ArgumentOutOfRangeException(nameof(typeStr));
+                list.Add(new Temp(temp, index));
+              }
+              break;
+            case MemorySegment.POINTER:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var pointer))
+              {
+                list.Add(new Pointer(pointer, index));
+              }
+              break;
+            case MemorySegment.ARGUMENT:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var argument))
+              {
+                list.Add(new Argument(argument, index));
+              }
+              break;
+            case MemorySegment.LOCAL:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var local))
+              {
+                list.Add(new Local(local, index));
+              }
+              break;
+            case MemorySegment.STATIC:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var statc))
+              {
+                list.Add(new Static(statc, index));
+              }
+              break;
+            case MemorySegment.THIS:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var dis))
+              {
+                list.Add(new This(dis, index));
+              }
+              break;
+            case MemorySegment.THAT:
+              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var dat))
+              {
+                list.Add(new That(dat, index));
               }
               break;
           }
-        }
-        else
-        {
-
-        }
-
-        if (line.StartsWith(CommandName.ADD))
-        {
-          list.Add(new Label(CommandName.ADD, labelId++));
-          if (!functionSeen.Contains(CommandName.ADD))
-          {
-            functionSeen.Add(CommandName.ADD);
-            list.Add(new Add());
-          }
           continue;
         }
 
-        if (line.StartsWith(CommandName.SUB))
+        foreach (var command in _commandMap.Keys)
         {
-          list.Add(new Label(CommandName.SUB, labelId++));
-          if (!functionSeen.Contains(CommandName.SUB))
+          if (line.StartsWith(command))
           {
-            functionSeen.Add(CommandName.SUB);
-            list.Add(new Sub());
+            list.Add(new Label(command, labelId++));
+            if (!functionSeen.ContainsKey(command))
+            {
+              functionSeen.Add(command, _commandMap[command]());
+            }
+            break;
           }
-          continue;
         }
-
-        if (line.StartsWith(CommandName.NEG))
-        {
-          list.Add(new Label(CommandName.NEG, labelId++));
-          if (!functionSeen.Contains(CommandName.NEG))
-          {
-            functionSeen.Add(CommandName.NEG);
-            list.Add(new Neg());
-          }
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.AND))
-        {
-          list.Add(new Label(CommandName.AND, labelId++));
-          if (!functionSeen.Contains(CommandName.AND))
-          {
-            functionSeen.Add(CommandName.AND);
-            list.Add(new And());
-          }
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.NOT))
-        {
-          list.Add(new Label(CommandName.NOT, labelId++));
-          if (!functionSeen.Contains(CommandName.NOT))
-          {
-            functionSeen.Add(CommandName.NOT);
-            list.Add(new Not());
-          }
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.OR))
-        {
-          list.Add(new Label(CommandName.OR, labelId++));
-          if (!functionSeen.Contains(CommandName.OR))
-          {
-            functionSeen.Add(CommandName.OR);
-            list.Add(new Or());
-          }
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.EQ))
-        {
-          list.Add(new Label(CommandName.EQ, labelId++));
-          if (!functionSeen.Contains(CommandName.EQ))
-          {
-            functionSeen.Add(CommandName.EQ);
-            list.Add(new Eq());
-          }
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.LT))
-        {
-          list.Add(new Label(CommandName.LT, labelId++));
-          if (!functionSeen.Contains(CommandName.LT))
-          {
-            functionSeen.Add(CommandName.LT);
-            list.Add(new Lt());
-          }
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.GT))
-        {
-          list.Add(new Label(CommandName.GT, labelId++));
-          if (!functionSeen.Contains(CommandName.GT))
-          {
-            functionSeen.Add(CommandName.GT);
-            list.Add(new Gt());
-          }
-          continue;
-        }
-
       }
 
+
+      list.AddRange(functionSeen.Values);
+      list.Add(new End());
+      list.Add(new True());
+      list.Add(new False());
 
       return list;
     }

@@ -1,6 +1,6 @@
 namespace VMTranslator.Commands.Stack
 {
-  public enum Type
+  public enum StackOperation
   {
     POP,
     PUSH

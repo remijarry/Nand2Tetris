@@ -4,19 +4,11 @@ using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Memory
 {
-  public class Constant : ICommand, IMemoryCommand
+  public class Constant : MemoryCommand
   {
-    /// <summary>
-    /// Number to push on the stack. It will also be used to select the equivalent memory address.
-    /// </summary>
-    /// <value></value>
-    public Type Type { get; }
-    public string Index { get; }
-
-    public Constant(Type segmentType, string index)
+    public Constant(StackOperation segmentType, string index) : base(segmentType, index)
     {
-      Type = segmentType;
-      Index = index;
+
     }
     public StringBuilder Execute(StringBuilder sb)
     {
