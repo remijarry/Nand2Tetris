@@ -6,11 +6,14 @@ namespace VMTranslator.Commands.Memory
 {
   public class Constant : MemoryCommand
   {
+    public override string Segment => MemorySegment.CONSTANT;
+
     public Constant(StackOperation segmentType, string index) : base(segmentType, index)
     {
 
     }
-    public StringBuilder Execute(StringBuilder sb)
+
+    public override StringBuilder WritePush(StringBuilder sb)
     {
       sb.AppendLine($"@{Index}");
       sb.AppendLine("D=A");
