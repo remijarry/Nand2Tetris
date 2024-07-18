@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text;
+using VMTranslator.Parsing;
+using VMTranslator.Translation;
 
 namespace VMTranslator
 {
@@ -22,34 +23,18 @@ namespace VMTranslator
                 Console.WriteLine($"The file {fileName} does not exist.");
                 return;
             }
-            try
+                        try
             {
                 using (StreamReader sr = new StreamReader(fileName))
                 {
                     var parser = new Parser(sr);
-                    var commands = parser.Parse();
+                    var commandList = parser.Parse();
 
-                    var codeWriter = new CodeWriter(fileName);
-                    var sb = new StringBuilder();
-
-                    var cmds = commands.Commands.GetCommands();
-                    for (var i = 0; i < cmds.Count; i++)
-                    {
-                        sb.Append(codeWriter.WriteCommand(cmds[i]));
-                    }
-
-                    sb.Append(codeWriter.WriteEnd());
-
-                    foreach (var func in commands.Functions)
-                    {
-                        sb.Append(codeWriter.WriteFunction(func));
-                    }
-
-                    var finalInstructions = RemoveEmptyLines(sb.ToString());
+                    var translator = new Translator(commandList);
+                    var asm = translator.Translate();
                     var inputDirectory = Path.GetDirectoryName(fileName);
-                    string inputFileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                    string outputFilePath = Path.Combine(inputDirectory, $"{inputFileNameWithoutExtension}.asm");
-                    File.WriteAllText(outputFilePath, finalInstructions);
+                    string outputFilePath = Path.Combine(inputDirectory, $"{Path.GetFileNameWithoutExtension(fileName)}.asm");
+                    File.WriteAllText(outputFilePath, asm);
                 }
             }
             catch (IOException e)

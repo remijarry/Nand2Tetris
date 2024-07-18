@@ -26,6 +26,9 @@ namespace VMTranslator
 
                     var translator = new Translator(commandList);
                     var asm = translator.Translate();
+                    var inputDirectory = Path.GetDirectoryName(fileName);
+                    string outputFilePath = Path.Combine(inputDirectory, $"{Path.GetFileNameWithoutExtension(fileName)}.asm");
+                    File.WriteAllText(outputFilePath, asm);
                 }
             }
             catch (IOException e)
