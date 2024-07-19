@@ -18,7 +18,6 @@ namespace VMTranslator.Commands.Arithmetic
       sb.AppendLine("A=M");
       sb.AppendLine("D=M");
       sb.AppendLine("0;JMP");
-
       return sb;
 
     }

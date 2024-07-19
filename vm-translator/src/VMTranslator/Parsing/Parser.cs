@@ -134,8 +134,8 @@ namespace VMTranslator.Parsing
       }
 
 
-      list.AddRange(functionSeen.Values);
       list.Add(new End());
+      list.AddRange(functionSeen.Values);
       list.Add(new True());
       list.Add(new False());
 

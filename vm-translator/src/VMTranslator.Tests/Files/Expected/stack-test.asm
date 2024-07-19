@@ -1,4 +1,3 @@
-// push constant 17
 @17
 D=A
 @0
@@ -6,7 +5,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 17
 @17
 D=A
 @0
@@ -14,10 +12,57 @@ A=M
 M=D
 @0
 M=M+1
-// eq
+@RETURN_EQ_0
+D=A
+@R13
+M=D
+@EQ
+D=A
+0;JMP
+(RETURN_EQ_0)
+@0
+M=M+1
+@17
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+@16
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+@RETURN_EQ_1
+D=A
+@R13
+M=D
+@EQ
+D=A
+0;JMP
+(RETURN_EQ_1)
+@0
+M=M+1
+@16
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+@17
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
 @RETURN_EQ_2
 D=A
-@R5
+@R13
 M=D
 @EQ
 D=A
@@ -25,61 +70,6 @@ D=A
 (RETURN_EQ_2)
 @0
 M=M+1
-// push constant 17
-@17
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// push constant 16
-@16
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// eq
-@RETURN_EQ_4
-D=A
-@R5
-M=D
-@EQ
-D=A
-0;JMP
-(RETURN_EQ_4)
-@0
-M=M+1
-// push constant 16
-@16
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// push constant 17
-@17
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// eq
-@RETURN_EQ_6
-D=A
-@R5
-M=D
-@EQ
-D=A
-0;JMP
-(RETURN_EQ_6)
-@0
-M=M+1
-// push constant 892
 @892
 D=A
 @0
@@ -87,7 +77,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 891
 @891
 D=A
 @0
@@ -95,18 +84,16 @@ A=M
 M=D
 @0
 M=M+1
-// lt
-@RETURN_LT_8
+@RETURN_LT_3
 D=A
-@R5
+@R13
 M=D
 @LT
 D=A
 0;JMP
-(RETURN_LT_8)
+(RETURN_LT_3)
 @0
 M=M+1
-// push constant 891
 @891
 D=A
 @0
@@ -114,7 +101,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 892
 @892
 D=A
 @0
@@ -122,18 +108,16 @@ A=M
 M=D
 @0
 M=M+1
-// lt
-@RETURN_LT_10
+@RETURN_LT_4
 D=A
-@R5
+@R13
 M=D
 @LT
 D=A
 0;JMP
-(RETURN_LT_10)
+(RETURN_LT_4)
 @0
 M=M+1
-// push constant 891
 @891
 D=A
 @0
@@ -141,7 +125,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 891
 @891
 D=A
 @0
@@ -149,18 +132,16 @@ A=M
 M=D
 @0
 M=M+1
-// lt
-@RETURN_LT_12
+@RETURN_LT_5
 D=A
-@R5
+@R13
 M=D
 @LT
 D=A
 0;JMP
-(RETURN_LT_12)
+(RETURN_LT_5)
 @0
 M=M+1
-// push constant 32767
 @32767
 D=A
 @0
@@ -168,7 +149,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 32766
 @32766
 D=A
 @0
@@ -176,18 +156,16 @@ A=M
 M=D
 @0
 M=M+1
-// gt
-@RETURN_GT_14
+@RETURN_GT_6
 D=A
-@R5
+@R13
 M=D
 @GT
 D=A
 0;JMP
-(RETURN_GT_14)
+(RETURN_GT_6)
 @0
 M=M+1
-// push constant 32766
 @32766
 D=A
 @0
@@ -195,7 +173,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 32767
 @32767
 D=A
 @0
@@ -203,18 +180,16 @@ A=M
 M=D
 @0
 M=M+1
-// gt
-@RETURN_GT_16
+@RETURN_GT_7
 D=A
-@R5
+@R13
 M=D
 @GT
 D=A
 0;JMP
-(RETURN_GT_16)
+(RETURN_GT_7)
 @0
 M=M+1
-// push constant 32766
 @32766
 D=A
 @0
@@ -222,7 +197,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 32766
 @32766
 D=A
 @0
@@ -230,18 +204,16 @@ A=M
 M=D
 @0
 M=M+1
-// gt
-@RETURN_GT_18
+@RETURN_GT_8
 D=A
-@R5
+@R13
 M=D
 @GT
 D=A
 0;JMP
-(RETURN_GT_18)
+(RETURN_GT_8)
 @0
 M=M+1
-// push constant 57
 @57
 D=A
 @0
@@ -249,7 +221,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 31
 @31
 D=A
 @0
@@ -257,7 +228,6 @@ A=M
 M=D
 @0
 M=M+1
-// push constant 53
 @53
 D=A
 @0
@@ -265,18 +235,16 @@ A=M
 M=D
 @0
 M=M+1
-// add
-@RETURN_ADD_0
+@RETURN_ADD_9
 D=A
-@R5
+@R13
 M=D
 @ADD
 D=A
 0;JMP
-(RETURN_ADD_0)
+(RETURN_ADD_9)
 @0
 M=M+1
-// push constant 112
 @112
 D=A
 @0
@@ -284,48 +252,36 @@ A=M
 M=D
 @0
 M=M+1
-// sub
-@0
-M=M-1
-@0
-M=M-1
-@0
-A=M
-D=M
-@0
-M=M+1
-@0
-A=M
-D=D-M
-@0
-M=M-1
-@0
-A=M
-M=D
-@0
-M=M+1
-// neg
-@0
-M=M-1
-@0
-A=M
-D=M
-D=-D
-M=D
-@0
-M=M+1
-// and
-@RETURN_AND_22
+@RETURN_SUB_10
 D=A
-@R5
+@R13
+M=D
+@SUB
+D=A
+0;JMP
+(RETURN_SUB_10)
+@0
+M=M+1
+@RETURN_NEG_11
+D=A
+@R13
+M=D
+@NEG
+D=A
+0;JMP
+(RETURN_NEG_11)
+@0
+M=M+1
+@RETURN_AND_12
+D=A
+@R13
 M=D
 @AND
 D=A
 0;JMP
-(RETURN_AND_22)
+(RETURN_AND_12)
 @0
 M=M+1
-// push constant 82
 @82
 D=A
 @0
@@ -333,28 +289,29 @@ A=M
 M=D
 @0
 M=M+1
-// or
-@RETURN_OR_23
+@RETURN_OR_13
 D=A
-@R5
+@R13
 M=D
 @OR
 D=A
 0;JMP
-(RETURN_OR_23)
+(RETURN_OR_13)
 @0
 M=M+1
-// not
-@RETURN_NOT_23
+@RETURN_NOT_14
 D=A
-@R5
+@R13
 M=D
 @NOT
 D=A
 0;JMP
-(RETURN_NOT_23)
+(RETURN_NOT_14)
 @0
 M=M+1
+(END)
+@END
+0;JMP
 (EQ)
 @0
 M=M-1
@@ -374,7 +331,6 @@ M=M-1
 D;JEQ
 @FALSE
 0;JMP
-
 (LT)
 @0
 M=M-1
@@ -394,7 +350,6 @@ M=M-1
 D;JLT
 @FALSE
 0;JMP
-
 (GT)
 @0
 M=M-1
@@ -414,7 +369,6 @@ M=M-1
 D;JGT
 @FALSE
 0;JMP
-
 (ADD)
 @0
 M=M-1
@@ -433,7 +387,42 @@ M=M-1
 @0
 A=M
 M=D
-@R5
+@R13
+A=M
+D=M
+0;JMP
+(SUB)
+@0
+M=M-1
+@0
+M=M-1
+@0
+A=M
+D=M
+@0
+M=M+1
+@0
+A=M
+D=D-M
+@0
+M=M-1
+@0
+A=M
+M=D
+@R13
+A=M
+D=M
+0;JMP
+(NEG)
+@0
+M=M-1
+@0
+A=M
+D=M
+
+D=-D
+M=D
+@R13
 A=M
 D=M
 0;JMP
@@ -455,7 +444,7 @@ M=M-1
 @0
 A=M
 M=D
-@R5
+@R13
 A=M
 D=M
 0;JMP
@@ -477,7 +466,7 @@ M=M-1
 @0
 A=M
 M=D
-@R5
+@R13
 A=M
 D=M
 0;JMP
@@ -491,16 +480,16 @@ D=!D
 @0
 A=M
 M=D
-@0
-M=M+1
-@0
-M=M+1
+@R13
+A=M
+D=M
+0;JMP
 (TRUE)
 @0
 A=M
 D=-1
 M=D
-@R5
+@R13
 A=M
 D=M
 0;JMP
@@ -509,7 +498,7 @@ D=M
 A=M
 D=0
 M=D
-@R5
+@R13
 A=M
 D=M
 0;JMP

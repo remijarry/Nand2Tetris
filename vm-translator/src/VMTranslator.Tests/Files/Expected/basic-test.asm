@@ -1,4 +1,3 @@
-// push CONSTANT 111
 @111
 D=A
 @0
@@ -6,7 +5,6 @@ A=M
 M=D
 @0
 M=M+1
-// push CONSTANT 333
 @333
 D=A
 @0
@@ -14,7 +12,6 @@ A=M
 M=D
 @0
 M=M+1
-// push CONSTANT 888
 @888
 D=A
 @0
@@ -22,7 +19,6 @@ A=M
 M=D
 @0
 M=M+1
-// pop static 8
 @0
 M=M-1
 @0
@@ -30,7 +26,6 @@ A=M
 D=M
 @16
 M=D
-// pop static 3
 @0
 M=M-1
 @0
@@ -38,7 +33,6 @@ A=M
 D=M
 @17
 M=D
-// pop static 1
 @0
 M=M-1
 @0
@@ -46,7 +40,6 @@ A=M
 D=M
 @18
 M=D
-// push STATIC 3
 @17
 A=M
 D=A
@@ -55,7 +48,6 @@ A=M
 M=D
 @0
 M=M+1
-// push STATIC 1
 @18
 A=M
 D=A
@@ -64,7 +56,38 @@ A=M
 M=D
 @0
 M=M+1
-// sub
+@RETURN_SUB_0
+D=A
+@R13
+M=D
+@SUB
+D=A
+0;JMP
+(RETURN_SUB_0)
+@0
+M=M+1
+@16
+A=M
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+@RETURN_ADD_1
+D=A
+@R13
+M=D
+@ADD
+D=A
+0;JMP
+(RETURN_ADD_1)
+@0
+M=M+1
+(END)
+@END
+0;JMP
+(SUB)
 @0
 M=M-1
 @0
@@ -82,30 +105,9 @@ M=M-1
 @0
 A=M
 M=D
-@0
-M=M+1
-// push STATIC 8
-@16
-A=M
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-// add
-@RETURN_ADD_9
-D=A
 @R13
-M=D
-@ADD
-D=A
-0;JMP
-(RETURN_ADD_9)
-@0
-M=M+1
-(END)
-@END
+A=M
+D=M
 0;JMP
 (ADD)
 @0
@@ -124,6 +126,24 @@ D=D+M
 M=M-1
 @0
 A=M
+M=D
+@R13
+A=M
+D=M
+0;JMP
+(TRUE)
+@0
+A=M
+D=-1
+M=D
+@R13
+A=M
+D=M
+0;JMP
+(FALSE)
+@0
+A=M
+D=0
 M=D
 @R13
 A=M

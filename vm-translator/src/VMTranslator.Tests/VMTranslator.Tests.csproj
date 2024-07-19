@@ -21,10 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="./Files/Input/Constant/*" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="./Files/Input/*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="./Files/Expected/Constant/*" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="./Files/Expected/*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
