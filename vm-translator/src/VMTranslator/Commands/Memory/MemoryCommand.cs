@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using VMTranslator.Commands.Stack;
 using VMTranslator.Constants;
@@ -6,6 +7,10 @@ namespace VMTranslator.Commands.Memory
 {
   public abstract class MemoryCommand : ICommand
   {
+    protected static int StaticPointer { get; set; } = 16;
+
+    public static Dictionary<string, string> StaticIndexToMemAddrMap = new Dictionary<string, string>();
+
     public StackOperation StackOperation { get; }
     public string Index { get; }
 

@@ -9,10 +9,6 @@ namespace VMTranslator.Translation
   {
     private List<ICommand> Commands { get; }
 
-    public static int StaticPointer = 16;
-
-    public static Dictionary<string, string> StaticIndexToMemAddrMap = new Dictionary<string, string>();
-
     public Translator(List<ICommand> commands)
     {
       Commands = commands;

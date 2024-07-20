@@ -15,7 +15,7 @@ namespace VMTranslator.Commands.Memory
 
     public override StringBuilder WritePush(StringBuilder sb)
     {
-      var memoryAddress = Translator.StaticIndexToMemAddrMap[Index];
+      var memoryAddress = StaticIndexToMemAddrMap[Index];
       sb.AppendLine($"@{memoryAddress}");
       sb.AppendLine("A=M");
       sb.AppendLine("D=A");
@@ -34,10 +34,10 @@ namespace VMTranslator.Commands.Memory
       sb.AppendLine($"@{Pointers.SegmentBaseAddress[MemorySegment.CONSTANT]}");
       sb.AppendLine($"A=M");
       sb.AppendLine($"D=M");
-      sb.AppendLine($"@{Translator.StaticPointer}");
+      sb.AppendLine($"@{StaticPointer}");
       sb.AppendLine($"M=D");
-      Translator.StaticIndexToMemAddrMap.Add(Index, Translator.StaticPointer.ToString());
-      Translator.StaticPointer++;
+      StaticIndexToMemAddrMap.Add(Index, StaticPointer.ToString());
+      StaticPointer++;
       return sb;
     }
 
