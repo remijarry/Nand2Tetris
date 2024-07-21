@@ -30,6 +30,18 @@ namespace VMTranslator.Parsing
         { CommandName.GT, () => new Gt() }
     };
 
+    private readonly Dictionary<string, Func<string, string, ICommand>> _memorySegmentMap = new Dictionary<string, Func<string, string, ICommand>>()
+        {
+            { MemorySegment.CONSTANT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation constant) ? new Constant(constant, index) : null },
+            { MemorySegment.TEMP, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation temp) ? new Temp(temp, index) : null },
+            { MemorySegment.POINTER, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation pointer) ? new Pointer(pointer, index) : null },
+            { MemorySegment.ARGUMENT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation argument) ? new Argument(argument, index) : null },
+            { MemorySegment.LOCAL, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation local) ? new Local(local, index) : null },
+            { MemorySegment.STATIC, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation statc) ? new Static(statc, index) : null },
+            { MemorySegment.THIS, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dis) ? new This(dis, index) : null },
+            { MemorySegment.THAT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dat) ? new That(dat, index) : null }
+        };
+
     public Parser(StreamReader streamReader)
     {
       _streamReader = streamReader;
@@ -65,56 +77,13 @@ namespace VMTranslator.Parsing
 
           var memorySegment = tokens[1];
           var index = tokens[2];
-          switch (memorySegment)
+          if (_memorySegmentMap.TryGetValue(memorySegment, out var createCommand))
           {
-            case MemorySegment.CONSTANT:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var constant))
-              {
-                list.Add(new Constant(constant, index));
-              }
-              break;
-            case MemorySegment.TEMP:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var temp))
-              {
-                list.Add(new Temp(temp, index));
-              }
-              break;
-            case MemorySegment.POINTER:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var pointer))
-              {
-                list.Add(new Pointer(pointer, index));
-              }
-              break;
-            case MemorySegment.ARGUMENT:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var argument))
-              {
-                list.Add(new Argument(argument, index));
-              }
-              break;
-            case MemorySegment.LOCAL:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var local))
-              {
-                list.Add(new Local(local, index));
-              }
-              break;
-            case MemorySegment.STATIC:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var statc))
-              {
-                list.Add(new Static(statc, index));
-              }
-              break;
-            case MemorySegment.THIS:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var dis))
-              {
-                list.Add(new This(dis, index));
-              }
-              break;
-            case MemorySegment.THAT:
-              if (Enum.TryParse<StackOperation>(typeStr.ToUpper(), out var dat))
-              {
-                list.Add(new That(dat, index));
-              }
-              break;
+            var command = createCommand(typeStr, index);
+            if (command != null)
+            {
+              list.Add(command);
+            }
           }
           continue;
         }
