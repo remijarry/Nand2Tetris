@@ -33,6 +33,7 @@ namespace VMTranslator.Commands.Memory
 
     public virtual StringBuilder WritePush(StringBuilder sb)
     {
+      sb.AppendLine($"// {StackOperation} {Segment} {Index}");
       sb.AppendLine($"@{Pointers.SegmentBaseAddress[Segment]}");
       sb.AppendLine("A=M");
       sb.AppendLine("D=A");
@@ -52,6 +53,7 @@ namespace VMTranslator.Commands.Memory
     }
     public virtual StringBuilder WritePop(StringBuilder sb)
     {
+      sb.AppendLine($"// {StackOperation} {Segment} {Index}");
       sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=M-1");
       sb.AppendLine($"@{Pointers.SegmentBaseAddress[Segment]}");

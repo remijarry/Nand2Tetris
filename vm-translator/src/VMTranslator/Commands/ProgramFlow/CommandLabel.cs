@@ -1,23 +1,27 @@
 using System.Text;
 using VMTranslator.Constants;
 
-namespace VMTranslator.Commands.Function
+namespace VMTranslator.Commands.ProgramFlow
 {
   /// <summary>
-  /// This class is in charge of creating a return label for a function.
+  /// This class is in charge of creating a return label for a the arithmetic and logical commands so we don't duplicate code in case we have multiple adds in a row.
   /// The index must be unique per function.
   /// </summary>
-  public class Label : ICommand
+  public class CommandLabel : ICommand
   {
     public string FunctionName { get; }
     public int Index { get; }
 
-    public Label(string functionName, int index)
+    public CommandLabel(string functionName, int index)
     {
       FunctionName = functionName;
       Index = index;
     }
 
+    public CommandLabel(string functionName)
+    {
+      FunctionName = functionName;
+    }
 
     public StringBuilder Execute(StringBuilder sb)
     {
@@ -35,7 +39,6 @@ namespace VMTranslator.Commands.Function
       sb.AppendLine("M=M+1");
 
       return sb;
-
     }
   }
 }

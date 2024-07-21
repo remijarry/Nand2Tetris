@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using VMTranslator.Commands;
 using VMTranslator.Commands.Arithmetic;
-using VMTranslator.Commands.Control;
-using VMTranslator.Commands.Function;
 using VMTranslator.Commands.Logical;
 using VMTranslator.Commands.Memory;
+using VMTranslator.Commands.ProgramFlow;
 using VMTranslator.Commands.Relational;
 using VMTranslator.Constants;
 using StackOperation = VMTranslator.Commands.Stack.StackOperation;
@@ -88,11 +87,18 @@ namespace VMTranslator.Parsing
           continue;
         }
 
+        if (line.StartsWith(CommandName.LABEL))
+        {
+          // label LOOP
+          var tokens = line.Split(' ');
+          list.Add(new CommandLabel(tokens[1].ToUpper(), 0));
+        }
+
         foreach (var command in _commandMap.Keys)
         {
           if (line.StartsWith(command))
           {
-            list.Add(new Label(command.ToUpper(), labelId++));
+            list.Add(new CommandLabel(command.ToUpper(), labelId++));
             if (!functionSeen.ContainsKey(command))
             {
               functionSeen.Add(command, _commandMap[command]());

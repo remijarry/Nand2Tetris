@@ -15,6 +15,7 @@ namespace VMTranslator.Commands.Memory
 
     public override StringBuilder WritePush(StringBuilder sb)
     {
+      sb.AppendLine($"// {StackOperation} {Segment} {Index}");
       sb.AppendLine($"@{Index}");
       sb.AppendLine("D=A");
       sb.AppendLine($"@{Pointers.STACK}");

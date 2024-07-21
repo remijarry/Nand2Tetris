@@ -8,7 +8,6 @@ namespace VMTranslator.Commands.Relational
     public StringBuilder Execute(StringBuilder sb)
     {
       sb.AppendLine(GetFunctionName());
-
       sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=M-1");
       sb.AppendLine($"@{Pointers.STACK}");

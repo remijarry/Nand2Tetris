@@ -24,5 +24,11 @@ namespace VMTranslator.Constants
     public const string PUSH = "push";
     public const string POP = "pop";
     #endregion
+
+    #region Program flow
+    public const string LABEL = "label";
+    public const string GOTO = "goto";
+    public const string IF_GO_TO = "if-goto";
+    #endregion
   }
 }

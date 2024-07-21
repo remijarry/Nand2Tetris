@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace VMTranslator.Commands.Control
+namespace VMTranslator.Commands.ProgramFlow
 {
   public class End : ICommand
   {

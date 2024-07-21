@@ -1,3 +1,20 @@
+@256
+D=A
+@0
+M=D
+@300
+D=A
+@1
+M=D
+@400
+D=A
+@2
+M=D
+@3
+D=A
+@400
+M=D
+
 // PUSH constant 0
 @0
 D=A
@@ -20,6 +37,13 @@ D=D+M
 A=D-M
 D=D-A
 M=D
+
+
+// INSERT LOOP HERE
+(LOOP)
+
+
+
 // PUSH argument 0
 @2
 A=M
@@ -140,6 +164,18 @@ A=M
 M=D
 @0
 M=M+1
+
+// if-goto LOOP
+@SP
+AM=M-1
+D=M
+@LOOP
+D;JGT
+
+// pop stack
+// if > 0
+// jump to loop
+
 // PUSH local 0
 @1
 A=M
