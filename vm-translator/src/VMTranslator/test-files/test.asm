@@ -6,28 +6,10 @@ A=M
 M=D
 @0
 M=M+1
-// PUSH constant 3
-@3
-D=A
-@0
-A=M
-M=D
-@0
-M=M+1
-@0
-AM=M-1
-D=M
-@R13
-M=D
+// neg
 @0
 A=M-1
-D=M
-@R13
-A=M
-D=D-A
-@0
-A=M-1
-M=D
+M=-M
 (END)
 @END
 0;JMP
