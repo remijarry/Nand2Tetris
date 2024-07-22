@@ -1,20 +1,39 @@
 using System.Text;
+using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Relational
 {
     /// <summary>
     /// Greater than
     /// </summary>
-    public class Gt : RelationalCommand
+    public class Gt : RelationalCommand, ICommand
     {
-        protected override string GetFunctionName()
+        private int lineIndex { get; }
+        public Gt()
         {
-            return "(GT)";
+            lineIndex = _index++;
         }
-
-        protected override string GetJumpCondition()
+        public StringBuilder Execute(StringBuilder sb)
         {
-            return "D;JGT";
+            sb.AppendLine("// gt");
+            sb.AppendLine($"@{Pointers.STACK}");
+            sb.AppendLine("AM=M-1");
+            sb.AppendLine("D=M");
+            sb.AppendLine("A=A-1");
+            sb.AppendLine("D=M-D");
+            sb.AppendLine($"@GT_TRUE{lineIndex}");
+            sb.AppendLine("D;JGT");
+            sb.AppendLine($"@{Pointers.STACK}");
+            sb.AppendLine("A=M-1");
+            sb.AppendLine("M=0");
+            sb.AppendLine($"@GT_END{lineIndex}");
+            sb.AppendLine("0;JMP");
+            sb.AppendLine($"(GT_TRUE{lineIndex})");
+            sb.AppendLine($"@{Pointers.STACK}");
+            sb.AppendLine("A=M-1");
+            sb.AppendLine("M=-1");
+            sb.AppendLine($"(GT_END{lineIndex})");
+            return sb;
         }
     }
 }

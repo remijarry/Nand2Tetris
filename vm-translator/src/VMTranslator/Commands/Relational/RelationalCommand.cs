@@ -3,38 +3,9 @@ using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Relational
 {
-  public abstract class RelationalCommand : ICommand
+  public abstract class RelationalCommand
   {
-    public StringBuilder Execute(StringBuilder sb)
-    {
-      sb.AppendLine(GetFunctionName());
-      sb.AppendLine($"@{Pointers.STACK}");
-      sb.AppendLine("M=M-1");
-      sb.AppendLine($"@{Pointers.STACK}");
-      sb.AppendLine("M=M-1");
-      sb.AppendLine($"@{Pointers.STACK}");
-      sb.AppendLine("A=M");
-      sb.AppendLine("D=M");
-      sb.AppendLine($"@{Pointers.STACK}");
-      sb.AppendLine("M=M+1");
-      sb.AppendLine($"@{Pointers.STACK}");
-      sb.AppendLine("A=M");
-      sb.AppendLine("D=D-M");
-      sb.AppendLine($"@{Pointers.STACK}");
-      sb.AppendLine("M=M-1");
-      sb.AppendLine("@TRUE");
-
-      sb.AppendLine(GetJumpCondition());
-
-      sb.AppendLine("@FALSE");
-      sb.AppendLine("0;JMP");
-
-      return sb;
-
-    }
-
-    protected abstract string GetFunctionName();
-
-    protected abstract string GetJumpCondition();
+    // lt, gt and eq have to check whether or not the condition is true or false, for this we generate functions that need unique ids
+    protected static int _index = 0;
   }
 }

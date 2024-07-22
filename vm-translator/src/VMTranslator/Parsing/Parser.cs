@@ -51,13 +51,10 @@ namespace VMTranslator.Parsing
 
     public List<ICommand> Parse()
     {
-      var functionSeen = new Dictionary<string, ICommand>();
       var list = new List<ICommand>();
 
       string line;
-      // for uniqueness
-      // ie: @RETURN_ADD_labelId
-      int labelId = 0;
+      int lineIndex = 0;
       while ((line = _streamReader.ReadLine()) != null)
       {
         if (IsComment(line))
@@ -79,15 +76,24 @@ namespace VMTranslator.Parsing
 
           var memorySegment = tokens[1];
           var index = tokens[2];
-          if (_memorySegmentMap.TryGetValue(memorySegment, out var createCommand))
+          if (_memorySegmentMap.TryGetValue(memorySegment, out var createMemoryCommand))
           {
-            var command = createCommand(typeStr, index);
-            if (command != null)
+            var memoryCommand = createMemoryCommand(typeStr, index);
+            if (memoryCommand != null)
             {
-              list.Add(command);
+              list.Add(memoryCommand);
             }
           }
           continue;
+        }
+
+        if (_commandMap.TryGetValue(line, out var createCommand))
+        {
+          var command = createCommand();
+          if (command != null)
+          {
+            list.Add(command);
+          }
         }
 
         if (line.StartsWith(CommandName.LABEL))
@@ -102,23 +108,9 @@ namespace VMTranslator.Parsing
         {
           list.Add(new IfGoTo(_labelStack.Pop()));
         }
-
-        foreach (var command in _commandMap.Keys)
-        {
-          if (line.StartsWith(command))
-          {
-            //list.Add(new CommandLabel(command.ToUpper(), labelId++));
-            functionSeen.Add(command, _commandMap[command]());
-            break;
-          }
-        }
       }
 
-
-      list.AddRange(functionSeen.Values);
       list.Add(new End());
-      // list.Add(new True());
-      // list.Add(new False());
 
       return list;
     }

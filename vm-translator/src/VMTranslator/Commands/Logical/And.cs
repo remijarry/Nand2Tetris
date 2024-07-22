@@ -9,6 +9,7 @@ namespace VMTranslator.Commands.Logical
         public StringBuilder Execute(StringBuilder sb)
         {
             sb.AppendLine("// and");
+            sb.AppendLine($"@{Pointers.STACK}");
             sb.AppendLine("AM=M-1");
             sb.AppendLine("D=M");
             sb.AppendLine($"@{Pointers.R13}");
