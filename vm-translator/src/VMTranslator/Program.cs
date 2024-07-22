@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using VMTranslator.Parsing;
 using VMTranslator.Translation;
 
@@ -16,31 +17,42 @@ namespace VMTranslator
                 return;
             }
 
-            var fileName = args[0];
+            var path = args[0];
 
-            if (!File.Exists(fileName))
+
+            if (Directory.Exists(path))
             {
-                Console.WriteLine($"The file {fileName} does not exist.");
-                return;
+                var files = Directory.GetFiles(path, "*.vm", SearchOption.AllDirectories);
+                var sb = new StringBuilder();
+                foreach (var file in files)
+                {
+                    using (StreamReader sr = new StreamReader(path))
+                    {
+                        var parser = new Parser(sr);
+                        var commandList = parser.Parse();
+                        var translator = new Translator(commandList);
+                        sb.AppendLine(translator.Translate());
+                    }
+                }
             }
-                        try
+
+            if (File.Exists(path))
             {
-                using (StreamReader sr = new StreamReader(fileName))
+                using (StreamReader sr = new StreamReader(path))
                 {
                     var parser = new Parser(sr);
                     var commandList = parser.Parse();
 
                     var translator = new Translator(commandList);
                     var asm = translator.Translate();
-                    var inputDirectory = Path.GetDirectoryName(fileName);
-                    string outputFilePath = Path.Combine(inputDirectory, $"{Path.GetFileNameWithoutExtension(fileName)}.asm");
+                    var inputDirectory = Path.GetDirectoryName(path);
+                    string outputFilePath = Path.Combine(inputDirectory, $"{Path.GetFileNameWithoutExtension(path)}.asm");
                     File.WriteAllText(outputFilePath, asm);
                 }
             }
-            catch (IOException e)
-            {
-                Console.WriteLine($"Error reading the file: {e.Message}");
-            }
+
+            Console.WriteLine($"The file {path} does not exist.");
+            return;
         }
 
         private static string RemoveEmptyLines(string input)
