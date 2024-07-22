@@ -13,7 +13,8 @@ namespace VMTranslator.Commands.ProgramFlow
 
     public StringBuilder Execute(StringBuilder sb)
     {
-      sb.AppendLine($"{Pointers.STACK}");
+      sb.AppendLine($"// if-goto {_label}");
+      sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("AM=M-1");
       sb.AppendLine("D=M");
       sb.AppendLine($"@{_label}");

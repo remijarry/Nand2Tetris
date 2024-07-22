@@ -14,6 +14,14 @@ M=D
 D=A
 @400
 M=D
+@6
+D=A
+@400
+M=D
+@3000
+D=A
+@401
+M=D
 
 // PUSH constant 0
 @0

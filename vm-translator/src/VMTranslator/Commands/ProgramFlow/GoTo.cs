@@ -11,6 +11,7 @@ namespace VMTranslator.Commands.ProgramFlow
     }
     public StringBuilder Execute(StringBuilder sb)
     {
+      sb.AppendLine($"// goto {_label}");
       sb.AppendLine($"@{_label}");
       sb.AppendLine("0;JMP");
       return sb;

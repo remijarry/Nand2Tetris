@@ -1,20 +1,27 @@
-@256
-D=A
-@0
-M=D
-@300
+// PUSH argument 1
+@2
+A=M
 D=A
 @1
+D=D+A
+@R13
 M=D
-@400
-D=A
-@2
+@R13
+A=M
+D=M
+@0
+A=M
 M=D
-@3
-D=A
-@400
+@0
+M=M+1
+// pop pointer 1
+@0
+M=M-1
+@0
+A=M
+D=M
+@4
 M=D
-
 // PUSH constant 0
 @0
 D=A
@@ -23,10 +30,10 @@ A=M
 M=D
 @0
 M=M+1
-// POP local 0
+// POP that 0
 @0
 M=M-1
-@1
+@4
 A=M
 D=A
 @0
@@ -37,84 +44,6 @@ D=D+M
 A=D-M
 D=D-A
 M=D
-(LOOP)
-// PUSH argument 0
-@2
-A=M
-D=A
-@0
-D=D+A
-@R13
-M=D
-@R13
-A=M
-D=M
-@0
-A=M
-M=D
-@0
-M=M+1
-// PUSH local 0
-@1
-A=M
-D=A
-@0
-D=D+A
-@R13
-M=D
-@R13
-A=M
-D=M
-@0
-A=M
-M=D
-@0
-M=M+1
-// add
-@0
-AM=M-1
-D=M
-@R13
-M=D
-@0
-A=M-1
-D=M
-@R13
-A=M
-D=D+A
-@0
-A=M-1
-M=D
-// POP local 0
-@0
-M=M-1
-@1
-A=M
-D=A
-@0
-D=D+A
-@0
-A=M
-D=D+M
-A=D-M
-D=D-A
-M=D
-// PUSH argument 0
-@2
-A=M
-D=A
-@0
-D=D+A
-@R13
-M=D
-@R13
-A=M
-D=M
-@0
-A=M
-M=D
-@0
-M=M+1
 // PUSH constant 1
 @1
 D=A
@@ -123,7 +52,45 @@ A=M
 M=D
 @0
 M=M+1
-//sub
+// POP that 1
+@0
+M=M-1
+@4
+A=M
+D=A
+@1
+D=D+A
+@0
+A=M
+D=D+M
+A=D-M
+D=D-A
+M=D
+// PUSH argument 0
+@2
+A=M
+D=A
+@0
+D=D+A
+@R13
+M=D
+@R13
+A=M
+D=M
+@0
+A=M
+M=D
+@0
+M=M+1
+// PUSH constant 2
+@2
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// sub
 @0
 AM=M-1
 D=M
@@ -152,6 +119,7 @@ D=D+M
 A=D-M
 D=D-A
 M=D
+(LOOP)
 // PUSH argument 0
 @2
 A=M
@@ -168,13 +136,18 @@ A=M
 M=D
 @0
 M=M+1
+// if-goto COMPUTE_ELEMENT
 0
 AM=M-1
 D=M
-@LOOP
+@COMPUTE_ELEMENT
 D;JNE
-// PUSH local 0
-@1
+// goto END
+@END
+0;JMP
+(COMPUTE_ELEMENT)
+// PUSH that 0
+@4
 A=M
 D=A
 @0
@@ -189,6 +162,145 @@ A=M
 M=D
 @0
 M=M+1
-(END)
-@END
+// PUSH that 1
+@4
+A=M
+D=A
+@1
+D=D+A
+@R13
+M=D
+@R13
+A=M
+D=M
+@0
+A=M
+M=D
+@0
+M=M+1
+// add
+@0
+AM=M-1
+D=M
+@R13
+M=D
+@0
+A=M-1
+D=M
+@R13
+A=M
+D=D+A
+@0
+A=M-1
+M=D
+// POP that 2
+@0
+M=M-1
+@4
+A=M
+D=A
+@2
+D=D+A
+@0
+A=M
+D=D+M
+A=D-M
+D=D-A
+M=D
+// push pointer 1
+@4
+A=M
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// PUSH constant 1
+@1
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// add
+@0
+AM=M-1
+D=M
+@R13
+M=D
+@0
+A=M-1
+D=M
+@R13
+A=M
+D=D+A
+@0
+A=M-1
+M=D
+// pop pointer 1
+@0
+M=M-1
+@0
+A=M
+D=M
+@4
+M=D
+// PUSH argument 0
+@2
+A=M
+D=A
+@0
+D=D+A
+@R13
+M=D
+@R13
+A=M
+D=M
+@0
+A=M
+M=D
+@0
+M=M+1
+// PUSH constant 1
+@1
+D=A
+@0
+A=M
+M=D
+@0
+M=M+1
+// sub
+@0
+AM=M-1
+D=M
+@R13
+M=D
+@0
+A=M-1
+D=M
+@R13
+A=M
+D=D-A
+@0
+A=M-1
+M=D
+// POP argument 0
+@0
+M=M-1
+@2
+A=M
+D=A
+@0
+D=D+A
+@0
+A=M
+D=D+M
+A=D-M
+D=D-A
+M=D
+// goto LOOP
+@LOOP
 0;JMP
+(END)

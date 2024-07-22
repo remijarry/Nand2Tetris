@@ -55,11 +55,5 @@ namespace VMTranslator
             return;
         }
 
-        private static string RemoveEmptyLines(string input)
-        {
-            var lines = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            var nonEmptyLines = lines.Where(line => !string.IsNullOrWhiteSpace(line));
-            return string.Join(Environment.NewLine, nonEmptyLines);
-        }
     }
 }

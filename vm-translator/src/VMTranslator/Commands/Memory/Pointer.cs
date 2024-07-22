@@ -14,6 +14,7 @@ namespace VMTranslator.Commands.Memory
 
     public override StringBuilder WritePush(StringBuilder sb)
     {
+      sb.AppendLine($"// push pointer {Index}");
       if (Index == "0")
       {
         sb.AppendLine($"@{Pointers.THIS}");
@@ -36,6 +37,7 @@ namespace VMTranslator.Commands.Memory
 
     public override StringBuilder WritePop(StringBuilder sb)
     {
+      sb.AppendLine($"// pop pointer {Index}");
       sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine($"M=M-1");
       sb.AppendLine($"@{Pointers.STACK}");

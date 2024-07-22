@@ -41,9 +41,6 @@ namespace VMTranslator.Parsing
             { MemorySegment.THAT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dat) ? new That(dat, index) : null }
         };
 
-    // might be overkilled
-    private Stack<string> _labelStack = new Stack<string>();
-
     public Parser(StreamReader streamReader)
     {
       _streamReader = streamReader;
@@ -99,18 +96,25 @@ namespace VMTranslator.Parsing
         if (line.StartsWith(CommandName.LABEL))
         {
           var tokens = line.Split(' ');
-          _labelStack.Push(tokens[1].ToUpper());
           list.Add(new Label(tokens[1].ToUpper()));
           continue;
         }
 
         if (line.StartsWith(CommandName.IF_GO_TO))
         {
-          list.Add(new IfGoTo(_labelStack.Pop()));
+          list.Add(new IfGoTo(line.Split(' ')[1]));
+          continue;
         }
+
+        if (line.StartsWith(CommandName.GOTO))
+        {
+          list.Add(new GoTo(line.Split(' ')[1]));
+        }
+
+
       }
 
-      list.Add(new End());
+      // list.Add(new End());
 
       return list;
     }
