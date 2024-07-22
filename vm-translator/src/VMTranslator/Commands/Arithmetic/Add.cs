@@ -1,53 +1,29 @@
 using System;
+using System.Text;
 using VMTranslator.Constants;
 
 namespace VMTranslator.Commands.Arithmetic
 {
-  public class Add : ArithmeticCommand
+  public class Add : ICommand
   {
-    protected override string DecrementPointer()
+    public StringBuilder Execute(StringBuilder sb)
     {
-      return $"@{Pointers.STACK}" +
-             $"{Environment.NewLine}" +
-             "M=M-1" +
-             $"{Environment.NewLine}" +
-             $"@{Pointers.STACK}" +
-             $"{Environment.NewLine}" +
-             "M=M-1";
-    }
-
-    protected override string GetFunctionName()
-    {
-      return "(ADD)";
-    }
-
-    protected override string GetOperand()
-    {
-      return "D=D+M";
-    }
-
-    protected override string SelectSecondValue()
-    {
-      return $"@0" +
-              $"{Environment.NewLine}" +
-              "M=M+1" +
-              $"{Environment.NewLine}" +
-              "@0" +
-              $"{Environment.NewLine}" +
-              "A=M";
-    }
-
-    protected override string PushResult()
-    {
-      return $"@0" +
-              $"{Environment.NewLine}" +
-              "M=M-1" +
-              $"{Environment.NewLine}" +
-              "@0" +
-              $"{Environment.NewLine}" +
-              "A=M" +
-              $"{Environment.NewLine}" +
-              "M=D";
+      sb.AppendLine("// add");
+      sb.AppendLine($"@{Pointers.STACK}");
+      sb.AppendLine("AM=M-1");
+      sb.AppendLine("D=M");
+      sb.AppendLine($"@{Pointers.R13}");
+      sb.AppendLine($"M=D");
+      sb.AppendLine($"@{Pointers.STACK}");
+      sb.AppendLine($"A=M-1");
+      sb.AppendLine($"D=M");
+      sb.AppendLine($"@{Pointers.R13}");
+      sb.AppendLine($"A=M");
+      sb.AppendLine($"D=D+A");
+      sb.AppendLine($"@{Pointers.STACK}");
+      sb.AppendLine("A=M-1");
+      sb.AppendLine("M=D");
+      return sb;
     }
   }
 }

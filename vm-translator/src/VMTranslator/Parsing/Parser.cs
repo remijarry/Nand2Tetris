@@ -41,6 +41,9 @@ namespace VMTranslator.Parsing
             { MemorySegment.THAT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dat) ? new That(dat, index) : null }
         };
 
+    // might be overkilled
+    private Stack<string> _labelStack = new Stack<string>();
+
     public Parser(StreamReader streamReader)
     {
       _streamReader = streamReader;
@@ -89,30 +92,33 @@ namespace VMTranslator.Parsing
 
         if (line.StartsWith(CommandName.LABEL))
         {
-          // label LOOP
           var tokens = line.Split(' ');
+          _labelStack.Push(tokens[1].ToUpper());
           list.Add(new CommandLabel(tokens[1].ToUpper(), 0));
+          continue;
+        }
+
+        if (line.StartsWith(CommandName.IF_GO_TO))
+        {
+          list.Add(new IfGoTo(_labelStack.Pop()));
         }
 
         foreach (var command in _commandMap.Keys)
         {
           if (line.StartsWith(command))
           {
-            list.Add(new CommandLabel(command.ToUpper(), labelId++));
-            if (!functionSeen.ContainsKey(command))
-            {
-              functionSeen.Add(command, _commandMap[command]());
-            }
+            //list.Add(new CommandLabel(command.ToUpper(), labelId++));
+            functionSeen.Add(command, _commandMap[command]());
             break;
           }
         }
       }
 
 
-      list.Add(new End());
       list.AddRange(functionSeen.Values);
-      list.Add(new True());
-      list.Add(new False());
+      list.Add(new End());
+      // list.Add(new True());
+      // list.Add(new False());
 
       return list;
     }
