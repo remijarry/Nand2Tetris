@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using VMTranslator.Constants;
 
@@ -9,7 +8,7 @@ namespace VMTranslator.Commands.Arithmetic
 
     public StringBuilder Execute(StringBuilder sb)
     {
-      sb.AppendLine("//sub");
+      sb.AppendLine("// sub");
       sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("AM=M-1");
       sb.AppendLine("D=M");

@@ -100,7 +100,7 @@ namespace VMTranslator.Parsing
         {
           var tokens = line.Split(' ');
           _labelStack.Push(tokens[1].ToUpper());
-          list.Add(new CommandLabel(tokens[1].ToUpper(), 0));
+          list.Add(new Label(tokens[1].ToUpper()));
           continue;
         }
 
