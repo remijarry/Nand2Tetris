@@ -1,18 +1,19 @@
 using System.Text;
+using VMTranslator.Addressing;
 
 namespace VMTranslator.Commands.ProgramFlow
 {
   public class GoTo : ICommand
   {
-    private string _label { get; }
+    public string Label { get; }
     public GoTo(string label)
     {
-      _label = label;
+      Label = label;
     }
     public StringBuilder Execute(StringBuilder sb)
     {
-      sb.AppendLine($"// goto {_label}");
-      sb.AppendLine($"@{_label}");
+      sb.AppendLine($"// goto {Label}");
+      sb.AppendLine($"@{Label}");
       sb.AppendLine("0;JMP");
       return sb;
     }

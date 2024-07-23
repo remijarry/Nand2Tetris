@@ -29,6 +29,8 @@ namespace VMTranslator.Constants
     public const string LABEL = "label";
     public const string GOTO = "goto";
     public const string IF_GO_TO = "if-goto";
+    public const string FUNCTION = "function";
+    public const string CALL = "call";
     #endregion
   }
 }

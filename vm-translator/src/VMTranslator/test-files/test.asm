@@ -1,3 +1,8 @@
+// bootstrap
+@256
+D=A
+@0
+M=D
 // PUSH argument 1
 @2
 A=M
@@ -137,7 +142,7 @@ M=D
 @0
 M=M+1
 // if-goto COMPUTE_ELEMENT
-0
+@0
 AM=M-1
 D=M
 @COMPUTE_ELEMENT

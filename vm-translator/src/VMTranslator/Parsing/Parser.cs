@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using VMtranslator.Commands;
 using VMTranslator.Commands;
 using VMTranslator.Commands.Arithmetic;
+using VMTranslator.Commands.Function;
 using VMTranslator.Commands.Logical;
 using VMTranslator.Commands.Memory;
 using VMTranslator.Commands.ProgramFlow;
@@ -15,45 +17,25 @@ namespace VMTranslator.Parsing
   public class Parser
   {
     private readonly StreamReader _streamReader;
-
-    private readonly Dictionary<string, Func<ICommand>> _commandMap = new Dictionary<string, Func<ICommand>>()
-    {
-        { CommandName.ADD, () => new Add() },
-        { CommandName.SUB, () => new Sub() },
-        { CommandName.NEG, () => new Neg() },
-        { CommandName.AND, () => new And() },
-        { CommandName.NOT, () => new Not() },
-        { CommandName.OR, () => new Or() },
-        { CommandName.EQ, () => new Eq() },
-        { CommandName.LT, () => new Lt() },
-        { CommandName.GT, () => new Gt() }
-    };
-
-    private readonly Dictionary<string, Func<string, string, ICommand>> _memorySegmentMap = new Dictionary<string, Func<string, string, ICommand>>()
-        {
-            { MemorySegment.CONSTANT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation constant) ? new Constant(constant, index) : null },
-            { MemorySegment.TEMP, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation temp) ? new Temp(temp, index) : null },
-            { MemorySegment.POINTER, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation pointer) ? new Pointer(pointer, index) : null },
-            { MemorySegment.ARGUMENT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation argument) ? new Argument(argument, index) : null },
-            { MemorySegment.LOCAL, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation local) ? new Local(local, index) : null },
-            { MemorySegment.STATIC, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation statc) ? new Static(statc, index) : null },
-            { MemorySegment.THIS, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dis) ? new This(dis, index) : null },
-            { MemorySegment.THAT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dat) ? new That(dat, index) : null }
-        };
+    private readonly ICommandFactory _commandFactory;
 
     public Parser(StreamReader streamReader)
     {
       _streamReader = streamReader;
+      _commandFactory = new CommandFactory();
     }
 
     public List<ICommand> Parse()
     {
-      var list = new List<ICommand>();
+      var list = new List<ICommand>()
+      {
+        {new Bootstrap()}
+      };
 
       string line;
-      int lineIndex = 0;
       while ((line = _streamReader.ReadLine()) != null)
       {
+
         if (IsComment(line))
         {
           continue;
@@ -66,56 +48,10 @@ namespace VMTranslator.Parsing
           continue;
         }
 
-        if (line.StartsWith(CommandName.PUSH) || line.StartsWith(CommandName.POP))
-        {
-          var tokens = line.Split(' ');
-          var typeStr = tokens[0];
-
-          var memorySegment = tokens[1];
-          var index = tokens[2];
-          if (_memorySegmentMap.TryGetValue(memorySegment, out var createMemoryCommand))
-          {
-            var memoryCommand = createMemoryCommand(typeStr, index);
-            if (memoryCommand != null)
-            {
-              list.Add(memoryCommand);
-            }
-          }
-          continue;
-        }
-
-        if (_commandMap.TryGetValue(line, out var createCommand))
-        {
-          var command = createCommand();
-          if (command != null)
-          {
-            list.Add(command);
-          }
-        }
-
-        if (line.StartsWith(CommandName.LABEL))
-        {
-          var tokens = line.Split(' ');
-          list.Add(new Label(tokens[1].ToUpper()));
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.IF_GO_TO))
-        {
-          list.Add(new IfGoTo(line.Split(' ')[1]));
-          continue;
-        }
-
-        if (line.StartsWith(CommandName.GOTO))
-        {
-          list.Add(new GoTo(line.Split(' ')[1]));
-        }
-
+        var command = _commandFactory.CreateCommand(line);
+        list.Add(command);
 
       }
-
-      // list.Add(new End());
-
       return list;
     }
 
