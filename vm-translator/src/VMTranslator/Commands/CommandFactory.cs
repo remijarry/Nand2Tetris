@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using VMtranslator.Commands;
 using VMTranslator.Commands.Arithmetic;
+using VMTranslator.Commands.Function;
 using VMTranslator.Commands.Logical;
 using VMTranslator.Commands.Memory;
 using VMTranslator.Commands.ProgramFlow;
@@ -13,6 +14,7 @@ namespace VMTranslator.Commands
 {
   public class CommandFactory : ICommandFactory
   {
+    //todo: refactor these dictionaries, it's a mess.
     private readonly Dictionary<string, Func<ICommand>> _commandMap = new Dictionary<string, Func<ICommand>>()
     {
         { CommandName.ADD, () => new Add() },
@@ -23,7 +25,8 @@ namespace VMTranslator.Commands
         { CommandName.OR, () => new Or() },
         { CommandName.EQ, () => new Eq() },
         { CommandName.LT, () => new Lt() },
-        { CommandName.GT, () => new Gt() }
+        { CommandName.GT, () => new Gt() },
+        { CommandName.RETURN, () => new Return() }
     };
 
     private readonly Dictionary<string, Func<string, string, ICommand>> _memorySegmentMap = new Dictionary<string, Func<string, string, ICommand>>()
@@ -35,7 +38,10 @@ namespace VMTranslator.Commands
             { MemorySegment.LOCAL, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation local) ? new Local(local, index) : null },
             { MemorySegment.STATIC, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation statc) ? new Static(statc, index) : null },
             { MemorySegment.THIS, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dis) ? new This(dis, index) : null },
-            { MemorySegment.THAT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dat) ? new That(dat, index) : null }
+            { MemorySegment.THAT, (typeStr, index) => Enum.TryParse(typeStr.ToUpper(), out StackOperation dat) ? new That(dat, index) : null },
+            // todo: this does not belong here, all these dicitonaries might need refactoring.
+            {CommandName.FUNCTION, (function, nArgs) => new Function.Function(function, int.Parse(nArgs))},
+            {CommandName.CALL, (label, nArgs) => new Function.Call(new GoTo(label), int.Parse(nArgs))}
         };
 
     private readonly Dictionary<string, Func<string, ICommand>> _functionMap = new Dictionary<string, Func<string, ICommand>>()
@@ -52,6 +58,16 @@ namespace VMTranslator.Commands
       if (_commandMap.TryGetValue(tokens[0], out var createCommand))
       {
         return createCommand();
+      }
+
+      if (tokens[0] == CommandName.FUNCTION)
+      {
+        return new Function.Function(tokens[1], int.Parse(tokens[2]));
+      }
+
+      if (tokens[0] == CommandName.CALL)
+      {
+        return new Call(new GoTo(tokens[1]), int.Parse(tokens[2]));
       }
 
       if (_memorySegmentMap.TryGetValue(tokens[1], out var createMemoryCommand))

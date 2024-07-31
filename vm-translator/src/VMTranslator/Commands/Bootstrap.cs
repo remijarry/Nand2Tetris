@@ -1,5 +1,6 @@
 using System.Text;
 using VMTranslator.Commands.Function;
+using VMTranslator.Commands.ProgramFlow;
 using VMTranslator.Constants;
 
 namespace VMTranslator.Commands
@@ -13,7 +14,8 @@ namespace VMTranslator.Commands
       sb.AppendLine("D=A");
       sb.AppendLine($"@{Pointers.STACK}");
       sb.AppendLine("M=D");
-
+      var call = new Call(new GoTo("Sys.init"), 0);
+      call.Execute(sb);
       return sb;
     }
   }

@@ -36,7 +36,8 @@ namespace VMTranslator.Commands.Memory
       sb.AppendLine($"D=M");
       sb.AppendLine($"@{StaticPointer}");
       sb.AppendLine($"M=D");
-      StaticIndexToMemAddrMap.Add(Index, StaticPointer.ToString());
+      StaticIndexToMemAddrMap[Index] = StaticPointer.ToString();
+      // StaticIndexToMemAddrMap.Add(Index, StaticPointer.ToString());
       StaticPointer++;
       return sb;
     }

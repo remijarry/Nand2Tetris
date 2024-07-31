@@ -3,14 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using VMtranslator.Commands;
 using VMTranslator.Commands;
-using VMTranslator.Commands.Arithmetic;
-using VMTranslator.Commands.Function;
-using VMTranslator.Commands.Logical;
-using VMTranslator.Commands.Memory;
-using VMTranslator.Commands.ProgramFlow;
-using VMTranslator.Commands.Relational;
-using VMTranslator.Constants;
-using StackOperation = VMTranslator.Commands.Stack.StackOperation;
+using VMTranslator.Files;
 
 namespace VMTranslator.Parsing
 {
@@ -18,42 +11,85 @@ namespace VMTranslator.Parsing
   {
     private readonly StreamReader _streamReader;
     private readonly ICommandFactory _commandFactory;
-
+    private readonly VMFiles input;
     public Parser(StreamReader streamReader)
     {
       _streamReader = streamReader;
       _commandFactory = new CommandFactory();
     }
 
+    public Parser(VMFiles Files)
+    {
+      _commandFactory = new CommandFactory();
+      input = Files;
+    }
+
     public List<ICommand> Parse()
     {
-      var list = new List<ICommand>()
+      var list = new List<ICommand>();
+      if (input.InvokeBootstrap)
       {
-        {new Bootstrap()}
-      };
+        list.Add(new Bootstrap());
+      }
 
-      string line;
-      while ((line = _streamReader.ReadLine()) != null)
+      foreach (var file in input.Files)
       {
-
-        if (IsComment(line))
+        using (StreamReader sr = new StreamReader(file))
         {
-          continue;
+          string line;
+          while ((line = sr.ReadLine()) != null)
+          {
+
+            if (IsComment(line))
+            {
+              continue;
+            }
+
+            line = NormalizeString(line);
+
+            if (string.IsNullOrWhiteSpace(line))
+            {
+              continue;
+            }
+
+            var command = _commandFactory.CreateCommand(line);
+            list.Add(command);
+
+          }
         }
-
-        line = NormalizeString(line);
-
-        if (string.IsNullOrWhiteSpace(line))
-        {
-          continue;
-        }
-
-        var command = _commandFactory.CreateCommand(line);
-        list.Add(command);
-
       }
       return list;
     }
+
+    // public List<ICommand> Parse()
+    // {
+    //   var list = new List<ICommand>()
+    //   {
+    //     { new Bootstrap() }
+    //   };
+
+    //   string line;
+    //   while ((line = _streamReader.ReadLine()) != null)
+    //   {
+
+    //     if (IsComment(line))
+    //     {
+    //       continue;
+    //     }
+
+    //     line = NormalizeString(line);
+
+    //     if (string.IsNullOrWhiteSpace(line))
+    //     {
+    //       continue;
+    //     }
+
+    //     var command = _commandFactory.CreateCommand(line);
+    //     list.Add(command);
+
+    //   }
+    //   return list;
+    // }
 
     private static bool IsComment(string line)
     {

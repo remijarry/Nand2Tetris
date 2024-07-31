@@ -31,6 +31,7 @@ namespace VMTranslator.Constants
     public const string IF_GO_TO = "if-goto";
     public const string FUNCTION = "function";
     public const string CALL = "call";
+    public const string RETURN = "return";
     #endregion
   }
 }

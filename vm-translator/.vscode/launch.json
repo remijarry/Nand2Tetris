@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "dotnet: build",
       "program": "${workspaceFolder}/src/VMTranslator/bin/Debug/net5.0/VMTranslator.dll",
-      "args": ["/home/tgrx/Documents/Dev/Nand2Tetris/vm-translator/src/VMTranslator/test-files/test.vm"],
+      "args": ["test-files"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "console": "internalConsole"

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
+using VMTranslator.Files;
 using VMTranslator.Parsing;
 using VMTranslator.Translation;
 
@@ -19,41 +20,47 @@ namespace VMTranslator
 
             var path = args[0];
 
+            if (!ContainsPath(path))
+            {
+                var dir = Directory.GetCurrentDirectory();
+                path = $"{dir}/{path}";
+            }
 
+            var inputFiles = new VMFiles();
+            var isDirectory = false;
             if (Directory.Exists(path))
             {
-                var files = Directory.GetFiles(path, "*.vm", SearchOption.AllDirectories);
-                var sb = new StringBuilder();
-                foreach (var file in files)
-                {
-                    using (StreamReader sr = new StreamReader(path))
-                    {
-                        var parser = new Parser(sr);
-                        var commandList = parser.Parse();
-                        var translator = new Translator(commandList);
-                        sb.AppendLine(translator.Translate());
-                    }
-                }
+                inputFiles.Files.AddRange(Directory.GetFiles(path, "*.vm", SearchOption.AllDirectories));
+                inputFiles.IsDirectory = true;
+                isDirectory = true;
             }
-
-            if (File.Exists(path))
+            else if (File.Exists(path))
             {
-                using (StreamReader sr = new StreamReader(path))
-                {
-                    var parser = new Parser(sr);
-                    var commandList = parser.Parse();
-
-                    var translator = new Translator(commandList);
-                    var asm = translator.Translate();
-                    var inputDirectory = Path.GetDirectoryName(path);
-                    string outputFilePath = Path.Combine(inputDirectory, $"{Path.GetFileNameWithoutExtension(path)}.asm");
-                    File.WriteAllText(outputFilePath, asm);
-                }
+                inputFiles.Files.Add(path);
             }
 
-            Console.WriteLine($"The file {path} does not exist.");
-            return;
+            var parser = new Parser(inputFiles);
+            var commandList = parser.Parse();
+            var translator = new Translator(commandList);
+            var assemblyCode = translator.Translate();
+            var fileWriter = new FileWriter(assemblyCode, path);
+            if (isDirectory)
+            {
+                fileWriter.WriteDirectory(path);
+            }
+            else
+            {
+                fileWriter.WriteFile(path);
+            }
+
+                return;
         }
 
+        public static bool ContainsPath(string filePath)
+        {
+            // Check if the path contains directory separator characters
+            return filePath.Contains(Path.DirectorySeparatorChar.ToString()) || filePath.Contains(Path.AltDirectorySeparatorChar.ToString());
+        }
     }
+
 }
