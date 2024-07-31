@@ -1,0 +1,16 @@
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/bin/Debug/net5.0/jack-analyzer
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/bin/Debug/net5.0/jack-analyzer.deps.json
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/bin/Debug/net5.0/jack-analyzer.runtimeconfig.json
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/bin/Debug/net5.0/jack-analyzer.runtimeconfig.dev.json
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/bin/Debug/net5.0/jack-analyzer.dll
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/bin/Debug/net5.0/jack-analyzer.pdb
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.GeneratedMSBuildEditorConfig.editorconfig
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.AssemblyInfoInputs.cache
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.AssemblyInfo.cs
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.csproj.CoreCompileInputs.cache
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.sourcelink.json
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.dll
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/refint/jack-analyzer.dll
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.pdb
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/jack-analyzer.genruntimeconfig.cache
+/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/Debug/net5.0/ref/jack-analyzer.dll
