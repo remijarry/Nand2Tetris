@@ -22,7 +22,7 @@ namespace VMTranslator.Files
     {
       var inputDirectory = Path.GetDirectoryName(path);
       var directoryName = new DirectoryInfo(inputDirectory).Name;
-      string outputFilePath = Path.Combine(inputDirectory, $"{directoryName}.asm");
+      string outputFilePath = Path.Combine(path, $"{directoryName}.asm");
       File.WriteAllText(outputFilePath, AssemblyCode);
     }
   }
