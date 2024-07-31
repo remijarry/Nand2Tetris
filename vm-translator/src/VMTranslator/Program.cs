@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using VMTranslator.Files;
 using VMTranslator.Parsing;
 using VMTranslator.Translation;
@@ -19,12 +17,19 @@ namespace VMTranslator
             }
 
             var path = args[0];
+            // var path = "test-files";
 
-            if (!ContainsPath(path))
+            if (!Path.IsPathRooted(path))
             {
-                var dir = Directory.GetCurrentDirectory();
-                path = $"{dir}/{path}";
+                var currentDirectory = Directory.GetCurrentDirectory();
+                path = Path.Combine(currentDirectory, path);
             }
+
+            // if (!ContainsPath(path))
+            // {
+            //     var dir = Directory.GetCurrentDirectory();
+            //     path = $"{dir}/{path}/";
+            // }
 
             var inputFiles = new VMFiles();
             var isDirectory = false;
@@ -33,6 +38,7 @@ namespace VMTranslator
                 inputFiles.Files.AddRange(Directory.GetFiles(path, "*.vm", SearchOption.AllDirectories));
                 inputFiles.IsDirectory = true;
                 isDirectory = true;
+                path = $"{path}/";
             }
             else if (File.Exists(path))
             {
@@ -53,7 +59,7 @@ namespace VMTranslator
                 fileWriter.WriteFile(path);
             }
 
-                return;
+            return;
         }
 
         public static bool ContainsPath(string filePath)
