@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer/JackAnalyzer.csproj": {}
+    "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer.csproj": {}
   },
   "projects": {
-    "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer/JackAnalyzer.csproj": {
+    "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer/JackAnalyzer.csproj",
+        "projectUniqueName": "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer.csproj",
         "projectName": "JackAnalyzer",
-        "projectPath": "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer/JackAnalyzer.csproj",
+        "projectPath": "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer.csproj",
         "packagesPath": "/home/tgrx/.nuget/packages/",
-        "outputPath": "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/JackAnalyzer/obj/",
+        "outputPath": "/home/tgrx/Documents/Dev/Nand2Tetris/jack-analyzer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/tgrx/.nuget/NuGet/NuGet.Config"

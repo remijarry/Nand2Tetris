@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using VMtranslator.Commands;
@@ -9,14 +8,8 @@ namespace VMTranslator.Parsing
 {
   public class Parser
   {
-    private readonly StreamReader _streamReader;
     private readonly ICommandFactory _commandFactory;
     private readonly VMFiles input;
-    public Parser(StreamReader streamReader)
-    {
-      _streamReader = streamReader;
-      _commandFactory = new CommandFactory();
-    }
 
     public Parser(VMFiles Files)
     {
@@ -60,36 +53,6 @@ namespace VMTranslator.Parsing
       }
       return list;
     }
-
-    // public List<ICommand> Parse()
-    // {
-    //   var list = new List<ICommand>()
-    //   {
-    //     { new Bootstrap() }
-    //   };
-
-    //   string line;
-    //   while ((line = _streamReader.ReadLine()) != null)
-    //   {
-
-    //     if (IsComment(line))
-    //     {
-    //       continue;
-    //     }
-
-    //     line = NormalizeString(line);
-
-    //     if (string.IsNullOrWhiteSpace(line))
-    //     {
-    //       continue;
-    //     }
-
-    //     var command = _commandFactory.CreateCommand(line);
-    //     list.Add(command);
-
-    //   }
-    //   return list;
-    // }
 
     private static bool IsComment(string line)
     {

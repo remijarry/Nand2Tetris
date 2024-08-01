@@ -17,19 +17,12 @@ namespace VMTranslator
             }
 
             var path = args[0];
-            // var path = "test-files";
 
             if (!Path.IsPathRooted(path))
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
                 path = Path.Combine(currentDirectory, path);
             }
-
-            // if (!ContainsPath(path))
-            // {
-            //     var dir = Directory.GetCurrentDirectory();
-            //     path = $"{dir}/{path}/";
-            // }
 
             var inputFiles = new VMFiles();
             var isDirectory = false;
