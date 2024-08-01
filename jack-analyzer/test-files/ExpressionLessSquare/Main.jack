@@ -1,0 +1,42 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/10/ExpressionLessSquare/Main.jack
+
+/** Expressionless version of projects/10/Square/Main.jack. */
+
+class Main {
+    static boolean test;    // Added for testing -- there is no static keyword
+                            // in the Square files.
+
+    function void main() {
+        var SquareGame game;
+        let game = game;
+        do game.run();
+        do game.dispose();
+        return;
+    }
+
+    function void more() {  // Added to test Jack syntax that is not used in
+        var boolean b;      // the Square files.
+        if (b) {
+        }
+        else {              // There is no else keyword in the Square files.
+        }
+        return;
+    }
+}
+
+
+keywords
+(class|function|var|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return)
+
+symbols
+\{|\}|\[|\]|\(|\)|\.|\,|\;|\+|\-|\*|\/|\&|\||\<|\>|\=|\~
+
+integerConstant
+^(0|[1-9][0-9]{0,3}|[1-2][0-9]{4}|3[0-1][0-9]{2}|32[0-6][0-9]|327[0-6][0-7])$
+
+
+stringConstant
+"[^"\r\n]*"
