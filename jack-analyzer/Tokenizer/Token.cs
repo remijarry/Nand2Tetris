@@ -4,8 +4,8 @@ namespace JackAnalyser.Tokenizer
 {
   public class Token
   {
-    TokenType Type { get; set; }
-    string Text { get; set; }
+    public TokenType Type { get; }
+    public string Text { get; }
 
     public Token(TokenType type, string text)
     {

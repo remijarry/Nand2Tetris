@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using JackAnalyser.Tokenizer;
 using JackAnalyzer.Files;
 
@@ -17,6 +19,23 @@ namespace JackAnalyzer.Tokenizer
                                 (?<StringConstant>""[^""\r\n]*"")";
 
 
+    public XDocument ToXml(IEnumerable<Token> tokens)
+    {
+      var root = new XElement("tokens");
+      var xdoc = new XDocument(root);
+      if (tokens == null || !tokens.Any())
+      {
+        return xdoc;
+      }
+
+      foreach (var token in tokens)
+      {
+        root.Add(new XElement(token.Type.ToString(), token.Text.PadLeft(token.Text.Length + 1, ' ').PadRight(token.Text.Length + 2, ' ')));
+      }
+
+      return xdoc;
+
+    }
     public IEnumerable<Token> Tokenize(IEnumerable<JackFile> files)
     {
       var tokens = new List<Token>();
@@ -61,12 +80,14 @@ namespace JackAnalyzer.Tokenizer
             if (match.Groups[groupName].Success)
             {
               var tokenType = groupName;
+              var camelCaseTokenType = ToCamelCase(tokenType);
               var value = match.Groups[groupName].Value;
 
-              if (Enum.TryParse(tokenType, out TokenType type))
+              if (Enum.TryParse(camelCaseTokenType, out TokenType type))
               {
                 tokenList.Add(new Token(type, value));
               }
+              continue;
             }
           }
         }
@@ -74,6 +95,27 @@ namespace JackAnalyzer.Tokenizer
       }
       return tokenList;
     }
+
+    private static string ToCamelCase(string tokenType)
+    {
+      string camelCaseTokenType = string.Empty;
+      for (var i = 0; i < tokenType.Length; i++)
+      {
+        if (i == 0)
+        {
+          camelCaseTokenType += Char.ToLower(tokenType.ElementAt(i));
+        }
+        else
+        {
+          camelCaseTokenType += tokenType.ElementAt(i);
+        }
+
+
+      }
+
+      return camelCaseTokenType;
+    }
+
     private static bool IsComment(string line)
     {
       return line.StartsWith('/');

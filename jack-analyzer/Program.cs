@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+
 using System.Linq;
-using System.Text.RegularExpressions;
 using JackAnalyzer.Files;
 using JackAnalyzer.Tokenizer;
 
@@ -25,6 +24,9 @@ namespace jack_analyzer
 
             var tokenizer = new Tokenizer();
             var tokens = tokenizer.Tokenize(inputFiles);
+
+            var xml = tokenizer.ToXml(tokens);
+
             Console.WriteLine(tokens.Any());
         }
     }
