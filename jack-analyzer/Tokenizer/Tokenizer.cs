@@ -12,7 +12,7 @@ namespace JackAnalyzer.Tokenizer
   public class Tokenizer : ITokenizer
   {
     private readonly string tokenPattern =
-                              @"(?<Keyword>class|function|var|method|field|static|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return) |
+                              @"(?<Keyword>class|constructor|function|method|field|static|var|int|char|boolean|void|true|false|null|this|let|do|if|else|while|return) |
                                 (?<Symbol>\{|\}|\[|\]|\(|\)|\.|\,|\;|\+|\-|\*|\/|\&|\||\<|\>|\=|\~) |
                                 (?<Identifier>[a-zA-Z_][a-zA-Z_0-9]*) |
                                 (?<IntegerConstant>\b(0|[1-9][0-9]{0,4}|[1-2][0-9]{4}|3[0-1][0-9]{2}|32[0-6][0-9]|327[0-6][0-7])\b) |
@@ -30,6 +30,7 @@ namespace JackAnalyzer.Tokenizer
 
       foreach (var token in tokens)
       {
+        // we want a space between the tags (ie: <el> string </el>)
         root.Add(new XElement(token.Type.ToString(), token.Text.PadLeft(token.Text.Length + 1, ' ').PadRight(token.Text.Length + 2, ' ')));
       }
 
@@ -85,6 +86,10 @@ namespace JackAnalyzer.Tokenizer
 
               if (Enum.TryParse(camelCaseTokenType, out TokenType type))
               {
+                if (type == TokenType.stringConstant)
+                {
+                  value = value.Replace("\"", string.Empty).Trim();
+                }
                 tokenList.Add(new Token(type, value));
               }
               continue;
