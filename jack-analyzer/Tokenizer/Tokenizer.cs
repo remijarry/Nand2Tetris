@@ -19,6 +19,7 @@ namespace JackAnalyzer.Tokenizer
                                 (?<StringConstant>""[^""\r\n]*"")";
 
 
+    private bool _commentOpen { get; set; }
     public XDocument ToXml(IEnumerable<Token> tokens)
     {
       var root = new XElement("tokens");
@@ -58,7 +59,9 @@ namespace JackAnalyzer.Tokenizer
       var regex = new Regex(tokenPattern, RegexOptions.IgnorePatternWhitespace);
       while ((line = sr.ReadLine()) != null)
       {
-        if (IsComment(line))
+        SetComment(line);
+
+        if (_commentOpen)
         {
           continue;
         }
@@ -88,7 +91,7 @@ namespace JackAnalyzer.Tokenizer
               {
                 if (type == TokenType.stringConstant)
                 {
-                  value = value.Replace("\"", string.Empty).Trim();
+                  value = value.Replace("\"", string.Empty);
                 }
                 tokenList.Add(new Token(type, value));
               }
@@ -121,9 +124,23 @@ namespace JackAnalyzer.Tokenizer
       return camelCaseTokenType;
     }
 
-    private static bool IsComment(string line)
+    private void SetComment(string line)
     {
-      return line.StartsWith('/');
+      line = line.Trim();
+      if (line.StartsWith('/'))
+      {
+        _commentOpen = true;
+        return;
+      }
+
+      if (line.StartsWith('*') && _commentOpen == true)
+      {
+        return;
+      }
+      else
+      {
+        _commentOpen = false;
+      }
     }
 
     /// <summary>
