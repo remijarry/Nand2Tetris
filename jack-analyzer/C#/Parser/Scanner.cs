@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using jack_analyzer;
 using JackAnalyser.Parser;
 using static JackAnalyzer.Parser.TokenType;
 
@@ -15,7 +16,27 @@ namespace JackAnalyzer.Parser
 
     private Dictionary<string, TokenType> _keywords = new()
     {
-
+      {"class", CLASS},
+      {"constructor", CONSTUCTOR},
+      {"method", METHOD},
+      {"function", FUNCTION},
+      {"int", INT},
+      {"boolean", BOOLEAN},
+      {"char", CHAR},
+      {"void", VOID},
+      {"var", VAR},
+      {"static", STATIC},
+      {"field", FIELD},
+      {"let", LET},
+      {"do", DO},
+      {"if", IF},
+      {"else", ELSE},
+      {"while", WHILE},
+      {"return", RETURN},
+      {"true", TRUE},
+      {"false", FALSE},
+      {"null", NULL},
+      {"this", THIS},
     };
 
     public Scanner(string source)
@@ -35,7 +56,7 @@ namespace JackAnalyzer.Parser
       return _tokens;
     }
 
-    public void ScanToken()
+    private void ScanToken()
     {
       char c = Advance();
       switch (c)
@@ -63,24 +84,120 @@ namespace JackAnalyzer.Parser
           AddToken(Match('=') ? GREATER_EQUAL : GREATER);
           break;
         case '/':
-          if (Match('/')) // comment to end of line
+          if (Match('/') || Match('*')) // comment to end of line
           {
             while (Peek() != '\n' && !IsAtEnd()) Advance();
-          }
-          else if (Match('*')) // comment until closing
-          {
-            while (Peek() != '/' && !IsAtEnd()) Advance();
           }
           else
           {
             AddToken(SLASH);
           }
-
+          break;
+        case ' ':
+        case '\r':
+        case '\t':
+          break;
+        case '\n':
+          _line++;
+          break;
+        case '"':
+          String();
+          break;
+        default:
+          if (IsDigit(c))
+          {
+            Number();
+          }
+          else
+          if (IsAlpha(c))
+          {
+            Identifier();
+          }
+          else
+          {
+            Program.Error(_line, "Unexpected character");
+          }
           break;
       }
     }
 
-    public char Peek()
+    private void String()
+    {
+      while (Peek() != '"' && !IsAtEnd())
+      {
+        if (Peek() == '\n')
+        {
+          _line++;
+        }
+        Advance();
+      }
+
+      if (IsAtEnd())
+      {
+        Program.Error(_line, "Unterminated string");
+      }
+      // closing double quote
+      Advance();
+      var value = _source.Substring(_start + 1, _current - 2 - _start);
+      AddToken(STRING_CONSTANT, value);
+    }
+
+    private void Number()
+    {
+      while (IsDigit(Peek()))
+      {
+        Advance();
+      }
+
+      if (Peek() == '.' && IsDigit(PeekNext()))
+      {
+        Advance();
+        while (IsDigit(Peek()))
+        {
+          Advance();
+        }
+      }
+
+      AddToken(INTEGER_CONSTANT, double.Parse(_source.Substring(_start, _current - _start)));
+    }
+
+    private void Identifier()
+    {
+      while (IsAlphaNumeric(Peek()))
+      {
+        Advance();
+      }
+
+      var word = _source.Substring(_start, _current - _start);
+      var isKeyword = _keywords.TryGetValue(word, out var type);
+
+      if (!isKeyword)
+      {
+        type = IDENTIFIER;
+      }
+
+      AddToken(type);
+    }
+
+    private bool IsDigit(char c)
+    {
+      return c >= '0' && c <= '9';
+    }
+
+    private bool IsAlpha(char c)
+    {
+      return
+        (c >= 'a' && c <= 'z') ||
+        (c >= 'A' && c <= 'Z') ||
+        (c == '_');
+    }
+
+    private bool IsAlphaNumeric(char c)
+    {
+      return IsAlpha(c) || IsDigit(c);
+    }
+
+    private char Peek()
     {
       if (IsAtEnd())
       {
@@ -90,7 +207,7 @@ namespace JackAnalyzer.Parser
       return _source[_current];
     }
 
-    public char PeekNext()
+    private char PeekNext()
     {
       if (_current + 1 > _source.Length)
       {
@@ -100,7 +217,7 @@ namespace JackAnalyzer.Parser
       return _source[_current + 1];
     }
 
-    public bool Match(char expected)
+    private bool Match(char expected)
     {
       if (IsAtEnd())
       {
@@ -116,23 +233,23 @@ namespace JackAnalyzer.Parser
       return true;
     }
 
-    public void AddToken(TokenType type)
+    private void AddToken(TokenType type)
     {
       AddToken(type, null);
     }
 
-    public void AddToken(TokenType type, object literal)
+    private void AddToken(TokenType type, object literal)
     {
       string text = _source.Substring(_start, _current - _start);
       _tokens.Add(new Token(type, text, literal, _line));
     }
 
-    public bool IsAtEnd()
+    private bool IsAtEnd()
     {
       return _current >= _source.Length;
     }
 
-    public char Advance()
+    private char Advance()
     {
       _current++;
       return _source[_current - 1];
