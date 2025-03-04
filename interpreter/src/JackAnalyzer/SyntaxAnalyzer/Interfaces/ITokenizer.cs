@@ -1,4 +1,4 @@
-namespace JackAnalyzer.Scan;
+namespace JackAnalyzer.SyntaxAnalyzer.Interfaces;
 
 public interface ITokenizer 
 {
