@@ -66,7 +66,7 @@ public class Tokenizer(string source) : ITokenizer
             case ';': AddToken(TokenType.SEMI_COLUMN, LexicalElement.SYMBOL); break;
             case '*': AddToken(TokenType.STAR, LexicalElement.SYMBOL); break;
             case '=': AddToken(TokenType.EQUAL, LexicalElement.SYMBOL); break;
-            case '~': AddToken(TokenType.TILDE, LexicalElement.SYMBOL); break;
+            case '~': AddToken(TokenType.NOT, LexicalElement.SYMBOL); break;
             case '|': AddToken(TokenType.PIPE, LexicalElement.SYMBOL); break;
             case '&': AddToken(TokenType.ESPERLUETTE, LexicalElement.SYMBOL); break;
             case '<':
