@@ -21,11 +21,7 @@ public class Token
     {
         // xml generation here?
         // probably not where it belongs
-        return $"<{LexicalElement}> {Lexeme} {Literal}</{LexicalElement}>";
+        return $"<{LexicalElement}> {Lexeme} {Literal}</{LexicalElement}>\r\n";
     }
 
 }
-
-//TODO: 
-// < should be &lt 
-// > shoul be &gt

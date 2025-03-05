@@ -24,4 +24,14 @@
     <ProjectReference Include="..\JackAnalyzer\JackAnalyzer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestCases/**/*.jack">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestCases/**/*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
 </Project>
