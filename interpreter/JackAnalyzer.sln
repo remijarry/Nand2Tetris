@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{418D5FEE-F93
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackAnalyzer", "src\JackAnalyzer\JackAnalyzer.csproj", "{CAB144FC-1A85-406A-842A-D55D269FC4A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackAnalyzer.Tests", "src\JackAnalyzer.Tests\JackAnalyzer.Tests.csproj", "{5955B44C-A702-47C0-9D87-F7464910DB29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{CAB144FC-1A85-406A-842A-D55D269FC4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAB144FC-1A85-406A-842A-D55D269FC4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAB144FC-1A85-406A-842A-D55D269FC4A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5955B44C-A702-47C0-9D87-F7464910DB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5955B44C-A702-47C0-9D87-F7464910DB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5955B44C-A702-47C0-9D87-F7464910DB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5955B44C-A702-47C0-9D87-F7464910DB29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CAB144FC-1A85-406A-842A-D55D269FC4A6} = {418D5FEE-F931-454C-B931-B8B588339B11}
+		{5955B44C-A702-47C0-9D87-F7464910DB29} = {418D5FEE-F931-454C-B931-B8B588339B11}
 	EndGlobalSection
 EndGlobal
