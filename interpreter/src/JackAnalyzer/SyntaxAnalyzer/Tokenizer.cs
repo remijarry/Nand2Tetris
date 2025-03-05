@@ -10,38 +10,13 @@ public class Tokenizer(string source) : ITokenizer
     private List<Token> _tokens = new();
     private int _line = 1;
 
-    private static readonly Dictionary<string, TokenType> keywords = new()
-    {
-        {"boolean", TokenType.BOOLEAN},
-        {"char", TokenType.CHAR},
-        {"class", TokenType.CLASS},
-        {"constructor", TokenType.CONSTRUCTOR},
-        {"do", TokenType.DO},
-        {"else", TokenType.ELSE},
-        {"field", TokenType.FIELD},
-        {"false", TokenType.FALSE},
-        {"function", TokenType.FUNCTION},
-        {"if", TokenType. IF},
-        {"int", TokenType.INT},
-        {"let", TokenType.LET},
-        {"method", TokenType.METHOD},
-        {"null", TokenType.NULL},
-        {"return", TokenType.RETURN},
-        {"static", TokenType.STATIC},
-        {"this", TokenType.STATIC},
-        {"true", TokenType.STATIC},
-        {"var", TokenType.STATIC},
-        {"void", TokenType.STATIC},
-        {"while", TokenType.WHILE}
-    };
-
     public List<Token> ScanTokens()
     {
         try
         {
             while (!_sourceText.IsAtEnd())
             {
-                _sourceText.Begin();
+                _sourceText.MarkTokenStart();
                 ScanToken();
             }
 
@@ -206,7 +181,7 @@ public class Tokenizer(string source) : ITokenizer
         }
         // closing "
         _sourceText.Advance();
-        var str = _sourceText.GetSpecificWindow(1, 2);
+        var str = _sourceText.GetSubstringFromMarkWithOffset(1, 2);
         AddToken(TokenType.STRING, LexicalElement.STRING_CONSTANT, str.Replace("\"", string.Empty));
     }
 
@@ -225,7 +200,7 @@ public class Tokenizer(string source) : ITokenizer
                 _sourceText.Advance();
             }
         }
-        AddToken(TokenType.INT, LexicalElement.INTEGER_CONSTANT, _sourceText.GetCurrentWindow());
+        AddToken(TokenType.INT, LexicalElement.INTEGER_CONSTANT, _sourceText.GetSubstringFromMark());
     }
 
     private void ScanIdentifier()
@@ -235,8 +210,8 @@ public class Tokenizer(string source) : ITokenizer
             _sourceText.Advance();
         }
 
-        var text = _sourceText.GetCurrentWindow();
-        var isKeyword = keywords.TryGetValue(text, out var keyword);
+        var text = _sourceText.GetSubstringFromMark();
+        var isKeyword = KeywordTable.TryGetKeyword(text, out var keyword);
         if (!isKeyword)
         {
             keyword = TokenType.IDENTIFIER;
@@ -274,11 +249,8 @@ public class Tokenizer(string source) : ITokenizer
 
     private void AddToken(TokenType type, string lexicalElement, object literal)
     {
-        string text = _sourceText.GetCurrentWindow();
+        string text = _sourceText.GetSubstringFromMark();
         _tokens.Add(new Token(type, lexicalElement, text, literal, _line));
     }
 
 }
-
-//TODO:
-// Implement other kinds of comments. AT the moment, only // is handled.
