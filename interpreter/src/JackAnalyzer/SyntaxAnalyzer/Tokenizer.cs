@@ -37,13 +37,22 @@ public class Tokenizer(string source) : ITokenizer
 
     public List<Token> ScanTokens()
     {
-        while (!_sourceText.IsAtEnd())
+        try
         {
-            _sourceText.Begin();
-            ScanToken();
-        }
+            while (!_sourceText.IsAtEnd())
+            {
+                _sourceText.Begin();
+                ScanToken();
+            }
 
-        _tokens.Add(new Token(TokenType.EOF, LexicalElement.EOF, "", null, _line));
+            _tokens.Add(new Token(TokenType.EOF, LexicalElement.EOF, "", null, _line));
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error at line {_line}");
+            Console.WriteLine(e.Message);
+        }
         return _tokens;
     }
 
@@ -67,7 +76,7 @@ public class Tokenizer(string source) : ITokenizer
             case '=': AddToken(TokenType.EQUAL, LexicalElement.SYMBOL); break;
             case '~': AddToken(TokenType.NOT, LexicalElement.SYMBOL); break;
             case '|': AddToken(TokenType.PIPE, LexicalElement.SYMBOL); break;
-            case '&': AddToken(TokenType.ESPERLUETTE, LexicalElement.SYMBOL); break;
+            case '&': AddToken(TokenType.ESPERLUETTE, LexicalElement.SYMBOL, "&amp;"); break;
             case '<':
                 if (_sourceText.Match('>'))
                 {
@@ -79,7 +88,7 @@ public class Tokenizer(string source) : ITokenizer
                 }
                 else
                 {
-                    AddToken(TokenType.LESS, LexicalElement.SYMBOL, "&lt");
+                    AddToken(TokenType.LESS, LexicalElement.SYMBOL, "&lt;");
                 }
                 break;
             case '>':
@@ -89,7 +98,7 @@ public class Tokenizer(string source) : ITokenizer
                 }
                 else
                 {
-                    AddToken(TokenType.GREATER, LexicalElement.SYMBOL, "&gt");
+                    AddToken(TokenType.GREATER, LexicalElement.SYMBOL, "&gt;");
                 }
                 break;
             case '/':
@@ -181,6 +190,7 @@ public class Tokenizer(string source) : ITokenizer
 
     private void ScanString()
     {
+        // we don't want the quotes
         while (_sourceText.Peek() != '"' && !_sourceText.IsAtEnd())
         {
             if (_sourceText.Peek() == '\n')
@@ -196,8 +206,8 @@ public class Tokenizer(string source) : ITokenizer
         }
         // closing "
         _sourceText.Advance();
-        var str = _sourceText.GetSpecificWindow(_sourceText.Position + 1, 2);
-        AddToken(TokenType.STRING, LexicalElement.STRING_CONSTANT, str);
+        var str = _sourceText.GetSpecificWindow(1, 2);
+        AddToken(TokenType.STRING, LexicalElement.STRING_CONSTANT, str.Replace("\"", string.Empty));
     }
 
     private void ScanNumber()

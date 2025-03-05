@@ -19,9 +19,8 @@ public class Token
 
     public override string ToString()
     {
-        // xml generation here?
-        // probably not where it belongs
-        return $"<{LexicalElement}> {Lexeme} {Literal}</{LexicalElement}>\r\n";
+        var toPrint = Literal is null ? Lexeme : Literal;
+        return $"<{LexicalElement}> {toPrint} </{LexicalElement}>\r\n";
     }
 
 }

@@ -11,7 +11,7 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/JackAnalyzer/bin/Debug/net8.0/JackAnalyzer.dll",
-            "args": [],
+            "args": ["/home/tgrx/Documents/Programming/Repositories/Nand2Tetris/interpreter/src/JackAnalyzer.Tests/TestCases/ArrayTest/Main.jack"],
             "cwd": "${workspaceFolder}/src/JackAnalyzer",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
