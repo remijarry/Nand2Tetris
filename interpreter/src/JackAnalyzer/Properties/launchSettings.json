@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "JackAnalyzer": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\remi.jarry\\OneDrive - EROAD\\Documents\\Entelect\\Sandbox\\Nand2Tetris\\interpreter\\src\\JackAnalyzer\\Tests\\ExpressionLessSquare\\Main.jack\""
+    }
+  }
+}
