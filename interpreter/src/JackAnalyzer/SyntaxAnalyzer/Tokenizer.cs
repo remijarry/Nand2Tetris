@@ -1,14 +1,14 @@
 using JackAnalyzer.Constants;
+using JackAnalyzer.Text;
+using System.Numerics;
 
 namespace JackAnalyzer.SyntaxAnalyzer.Interfaces;
 
 public class Tokenizer(string source) : ITokenizer
 {
-    private readonly string source = source;
-    private List<Token> tokens = new();
-    private int start = 0;
-    private int current = 0;
-    private int line = 1;
+    private readonly SourceText _sourceText = new(source);
+    private List<Token> _tokens = new();
+    private int _line = 1;
 
     private static readonly Dictionary<string, TokenType> keywords = new()
     {
@@ -35,22 +35,21 @@ public class Tokenizer(string source) : ITokenizer
         {"while", TokenType.WHILE}
     };
 
-
     public List<Token> ScanTokens()
     {
-        while (!IsAtEnd())
+        while (!_sourceText.IsAtEnd())
         {
-            start = current;
+            _sourceText.Begin();
             ScanToken();
         }
 
-        tokens.Add(new Token(TokenType.EOF, LexicalElement.EOF, "", null, line));
-        return tokens;
+        _tokens.Add(new Token(TokenType.EOF, LexicalElement.EOF, "", null, _line));
+        return _tokens;
     }
 
     private void ScanToken()
     {
-        char c = Advance();
+        char c = _sourceText.Advance();
         switch (c)
         {
             case '(': AddToken(TokenType.LEFT_PAREN, LexicalElement.SYMBOL); break;
@@ -70,11 +69,11 @@ public class Tokenizer(string source) : ITokenizer
             case '|': AddToken(TokenType.PIPE, LexicalElement.SYMBOL); break;
             case '&': AddToken(TokenType.ESPERLUETTE, LexicalElement.SYMBOL); break;
             case '<':
-                if (Match('>'))
+                if (_sourceText.Match('>'))
                 {
                     AddToken(TokenType.NOT_EQUAL, LexicalElement.SYMBOL);
                 }
-                else if (Match('='))
+                else if (_sourceText.Match('='))
                 {
                     AddToken(TokenType.LESS_EQUAL, LexicalElement.SYMBOL);
                 }
@@ -84,7 +83,7 @@ public class Tokenizer(string source) : ITokenizer
                 }
                 break;
             case '>':
-                if (Match('='))
+                if (_sourceText.Match('='))
                 {
                     AddToken(TokenType.GREATER_EQUAL, LexicalElement.SYMBOL);
                 }
@@ -94,27 +93,13 @@ public class Tokenizer(string source) : ITokenizer
                 }
                 break;
             case '/':
-                if (Match('/'))
+                if (_sourceText.Peek() == '/')
                 {
-                    while (Peek() != '\n' && !IsAtEnd())
-                    {
-                        Advance();
-                    }
+                    ScanSingleLineComment();
                 }
-                else if (Match('*'))
+                else if (_sourceText.Peek() == '*')
                 {
-                    if (Peek() == '*') 
-                    {
-                        Advance();
-                    }
-
-                    while (Peek() != '*' && PeekNext() != '/')
-                    {
-                        Advance();
-                    }
-                    // skip * and /
-                    Advance();
-                    Advance();
+                    ScanMultiLineComment();
                 }
                 else
                 {
@@ -126,82 +111,137 @@ public class Tokenizer(string source) : ITokenizer
             case '\t':
                 break;
             case '\n':
-                line++;
+                _line++;
                 break;
             case '"':
-                String();
+                ScanString();
                 break;
             default:
                 if (IsDigit(c))
                 {
-                    Number();
+                    ScanNumber();
                 }
                 else if (IsAlpha(c))
                 {
-                    Identifier();
+                    ScanIdentifier();
                 }
                 else
                 {
-                    Program.Error(line, "Unexpected character.");
+                    Program.Error(_line, "Unexpected character.");
                 }
                 break;
         }
     }
 
-    private bool IsAtEnd()
+    private void ScanSingleLineComment()
     {
-        return current >= source.Length;
-    }
-
-    private char Advance()
-    {
-        return source.ElementAt(current++);
-        // or current++;
-        // return source.ElementAt(current - 1)
-    }
-
-    private void String()
-    {
-        while (Peek() != '"' && !IsAtEnd())
+        if (_sourceText.Match('/'))
         {
-            if (Peek() == '\n')
+            while (_sourceText.Peek() != '\n' && !_sourceText.IsAtEnd())
             {
-                line++;
+                _sourceText.Advance();
             }
-            Advance();
+
+        }
+    }
+
+    private void ScanMultiLineComment()
+    {
+        if (_sourceText.Match('*'))
+        {
+            // Consume the initial '*'
+            _sourceText.Advance();
+
+            while (true)
+            {
+                if (_sourceText.IsAtEnd())
+                {
+                    // Handle the case where the comment is not closed properly.
+                    // For example, you might want to throw an exception or simply break.
+                    break;
+                }
+
+                if (_sourceText.Peek() == '*' && _sourceText.PeekAt(1) == '/')
+                {
+                    // Consume '*/'
+                    _sourceText.Advance();  // Consume '*'
+                    _sourceText.Advance();  // Consume '/'
+                    break;
+                }
+
+                if (_sourceText.Peek() == '\n')
+                {
+                    _line++;
+                }
+
+                _sourceText.Advance();
+            }
+        }
+    }
+
+    private void ScanString()
+    {
+        while (_sourceText.Peek() != '"' && !_sourceText.IsAtEnd())
+        {
+            if (_sourceText.Peek() == '\n')
+            {
+                _line++;
+            }
+            _sourceText.Advance();
         }
 
-        if (IsAtEnd())
+        if (_sourceText.IsAtEnd())
         {
-            Program.Error(line, "Unterminated string");
+            Program.Error(_line, "Unterminated string");
         }
         // closing "
-        Advance();
-        var value = source.Substring(start + 1, current - 2 - start);
-        AddToken(TokenType.STRING, LexicalElement.STRING_CONSTANT, value);
+        _sourceText.Advance();
+        var str = _sourceText.GetSpecificWindow(_sourceText.Position + 1, 2);
+        AddToken(TokenType.STRING, LexicalElement.STRING_CONSTANT, str);
+    }
+
+    private void ScanNumber()
+    {
+        while (IsDigit(_sourceText.Peek()))
+        {
+            _sourceText.Advance();
+        }
+
+        if (_sourceText.Peek() == '.' && IsDigit(_sourceText.PeekAt(1)))
+        {
+            _sourceText.Advance();
+            while (IsDigit(_sourceText.Peek()))
+            {
+                _sourceText.Advance();
+            }
+        }
+        AddToken(TokenType.INT, LexicalElement.INTEGER_CONSTANT, _sourceText.GetCurrentWindow());
+    }
+
+    private void ScanIdentifier()
+    {
+        while (IsAlphaNumeric(_sourceText.Peek()))
+        {
+            _sourceText.Advance();
+        }
+
+        var text = _sourceText.GetCurrentWindow();
+        var isKeyword = keywords.TryGetValue(text, out var keyword);
+        if (!isKeyword)
+        {
+            keyword = TokenType.IDENTIFIER;
+            AddToken(keyword, LexicalElement.IDENTIFIER);
+        }
+        else
+        {
+            AddToken(keyword, LexicalElement.KEYWORD);
+        }
+
     }
 
     private static bool IsDigit(char c)
     {
         return c >= '0' && c <= '9';
-    }
-
-    private void Number()
-    {
-        while (IsDigit(Peek()))
-        {
-            Advance();
-        }
-
-        if (Peek() == '.' && IsDigit(PeekNext()))
-        {
-            Advance();
-            while (IsDigit(Peek()))
-            {
-                Advance();
-            }
-        }
-        AddToken(TokenType.INT, LexicalElement.INTEGER_CONSTANT, source.Substring(start, current - start));
     }
 
     private static bool IsAlpha(char c)
@@ -217,27 +257,6 @@ public class Tokenizer(string source) : ITokenizer
         return IsAlpha(c) || IsDigit(c);
     }
 
-    private void Identifier()
-    {
-        while (IsAlphaNumeric(Peek()))
-        {
-            Advance();
-        }
-
-        var text = source.Substring(start, current - start);
-        var isKeyword = keywords.TryGetValue(text, out var keyword);
-        if (!isKeyword)
-        {
-            keyword = TokenType.IDENTIFIER;
-            AddToken(keyword, LexicalElement.IDENTIFIER);
-        }
-        else
-        {
-            AddToken(keyword, LexicalElement.KEYWORD);
-        }
-
-    }
-
     private void AddToken(TokenType type, string lexicalElement)
     {
         AddToken(type, lexicalElement, null);
@@ -245,45 +264,10 @@ public class Tokenizer(string source) : ITokenizer
 
     private void AddToken(TokenType type, string lexicalElement, object literal)
     {
-        string text = source[start..current];
-        tokens.Add(new Token(type, lexicalElement, text, literal, line));
+        string text = _sourceText.GetCurrentWindow();
+        _tokens.Add(new Token(type, lexicalElement, text, literal, _line));
     }
 
-    private bool Match(char c)
-    {
-        if (IsAtEnd())
-        {
-            return false;
-        }
-
-        if (source.ElementAt(current) != c)
-        {
-            return false;
-        }
-
-        current++;
-        return true;
-    }
-
-    private char Peek()
-    {
-        if (IsAtEnd())
-        {
-            return '\0';
-        }
-
-        return source.ElementAt(current);
-    }
-
-    private char PeekNext()
-    {
-        if (current + 1 > source.Length)
-        {
-            return '\0';
-        }
-
-        return source.ElementAt(current + 1);
-    }
 }
 
 //TODO:

@@ -27,26 +27,19 @@ class Program
 
     private static void RunFiles(string path)
     {
-        // if (!Path.IsPathRooted(path))
-        // {
-
-        // }
-        // var currentDirectory = Directory.GetCurrentDirectory();
-        // path = Path.Combine(currentDirectory, path);
-
-        string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Tests/ExpressionLessSquare/Main.jack");
-        string content = File.ReadAllText(filePath);
-        // var source = File.ReadAllText(path);
-        
-        ITokenizer tokenizer = new Tokenizer(content);
-        var tokens = tokenizer.ScanTokens();
-        
-        Console.WriteLine("<tokens>");
-        foreach (var token in tokens)
+        if (File.Exists(path))
         {
-            Console.WriteLine(token);
+            string content = File.ReadAllText(path);
+            ITokenizer tokenizer = new Tokenizer(content);
+            var tokens = tokenizer.ScanTokens();
+
+            Console.WriteLine("<tokens>");
+            foreach (var token in tokens)
+            {
+                Console.WriteLine(token);
+            }
+            Console.WriteLine("</tokens>");
         }
-        Console.WriteLine("</tokens>");
 
         return;
     }
